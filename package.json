@@ -1,0 +1,36 @@
+{
+  "name": "paperwall",
+  "version": "0.1.0",
+  "description": "Integrate PaperWall into your site or publication",
+  "type": "module",
+  "main": "./src/paperwall.ts",
+  "module": "./src/paperwall.ts",
+  "types": "./src/paperwall.ts",
+  "exports": {
+    ".": {
+      "types": "./src/paperwall.ts",
+      "import": "./src/paperwall.ts"
+    },
+    "./types": {
+      "types": "./src/types.ts",
+      "import": "./src/types.ts"
+    }
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "paywall",
+    "browser",
+    "typescript"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
