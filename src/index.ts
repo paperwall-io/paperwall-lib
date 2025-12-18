@@ -3,6 +3,8 @@ import store from "./utils/store";
 import localStore from "./utils/localStore";
 import ops from "./operations";
 import { api } from "./api";
+import { urlListener } from "./utils/urlListener";
+import { explainPastThreshold, explainWhyFree } from "./utils/explainThreshold";
 
 const configDefaults = {
   apiBaseUrl: "https://api.paperwall.io",
@@ -102,6 +104,26 @@ const initPaperWall = (_config: WallConfig) => {
     },
     detectIsPost,
     getReadingTime,
+    urlListener,
+    isFree: () => {
+      const { article } = entities.get();
+      if (!article) {
+        throw new Error("isFree: Article not found");
+      }
+      return article.num_tickets === 0;
+    },
+    isPreviewMode: () => {
+      const { article, flags } = entities.get();
+      if (!(article && flags)) {
+        throw new Error("isPreviewMode: Article/flags not found");
+      }
+
+      return flags?.previewMode;
+    },
+    thresholds: {
+      whyUnder: explainWhyFree,
+      whyOver: explainPastThreshold,
+    },
     rateArticle: async (
       ...opts: [articleId: string, sessionId: string, rating: number]
     ) => {
