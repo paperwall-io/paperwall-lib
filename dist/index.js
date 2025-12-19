@@ -251,22 +251,22 @@ var initApp = (apiOpts, config, wallState, entities) => {
 var operations_default = { initArticleSession, initApp };
 
 // src/utils/urlListener.ts
-var urlListener = (apply) => {
-  window.addEventListener("hashchange", apply);
-  window.addEventListener("popstate", apply);
+var urlListener = (onNav) => {
+  window.addEventListener("hashchange", onNav);
+  window.addEventListener("popstate", onNav);
   const originalPushState = history.pushState;
   const originalReplaceState = history.replaceState;
   history.pushState = function(...args) {
     originalPushState.apply(this, args);
-    apply();
+    onNav();
   };
   history.replaceState = function(...args) {
     originalReplaceState.apply(this, args);
-    apply();
+    onNav();
   };
   return () => {
-    window.removeEventListener("hashchange", apply);
-    window.removeEventListener("popstate", apply);
+    window.removeEventListener("hashchange", onNav);
+    window.removeEventListener("popstate", onNav);
     history.pushState = originalPushState;
     history.replaceState = originalReplaceState;
   };
@@ -376,6 +376,7 @@ var initPaperWall = (_config) => {
     resetOnNav: () => urlListener(() => {
       resetArticleEl();
       wallState.set("LOADING");
+      console.log("resetOnNav triggered");
     }),
     isFree: () => {
       const { article } = entities.get();

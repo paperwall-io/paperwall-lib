@@ -108,6 +108,7 @@ const initPaperWall = (_config: WallConfig) => {
       urlListener(() => {
         resetArticleEl();
         wallState.set("LOADING");
+        console.log("resetOnNav triggered");
       }),
     isFree: () => {
       const { article } = entities.get();

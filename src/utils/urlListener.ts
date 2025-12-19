@@ -1,9 +1,9 @@
 
-export const urlListener = (apply: () => void) => {
+export const urlListener = (onNav: () => void) => {
   
   // Native events
-  window.addEventListener("hashchange", apply);
-  window.addEventListener("popstate", apply);
+  window.addEventListener("hashchange", onNav);
+  window.addEventListener("popstate", onNav);
 
   // Monkey-patch history methods
   const originalPushState = history.pushState;
@@ -11,17 +11,17 @@ export const urlListener = (apply: () => void) => {
 
   history.pushState = function (...args) {
     originalPushState.apply(this, args);
-    apply();
+    onNav();
   };
 
   history.replaceState = function (...args) {
     originalReplaceState.apply(this, args);
-    apply();
+    onNav();
   };
 
   return () => {
-    window.removeEventListener("hashchange", apply);
-    window.removeEventListener("popstate", apply);
+    window.removeEventListener("hashchange", onNav);
+    window.removeEventListener("popstate", onNav);
     history.pushState = originalPushState;
     history.replaceState = originalReplaceState;
   };
