@@ -106,9 +106,11 @@ const initPaperWall = (_config: WallConfig) => {
     getReadingTime,
     resetOnNav: () =>
       urlListener(() => {
-        resetArticleEl();
-        wallState.set("LOADING");
-        console.log("resetOnNav triggered");
+        setTimeout(() => {
+          console.log("resetOnNav triggered");
+          resetArticleEl();
+          wallState.set("LOADING");
+        }, 100);
       }),
     isFree: () => {
       const { article } = entities.get();
