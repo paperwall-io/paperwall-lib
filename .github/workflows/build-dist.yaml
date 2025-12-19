@@ -1,0 +1,18 @@
+# See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
+
+name: Uploading assets
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Upload assets to storage - ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.45
+      - run: bun run build
