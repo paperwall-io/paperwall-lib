@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Integrate PaperWall into your site or publication",
   "type": "module",
-  "types": "./src/types.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "bun build.ts"
   },
