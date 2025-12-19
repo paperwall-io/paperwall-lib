@@ -373,7 +373,10 @@ var initPaperWall = (_config) => {
     },
     detectIsPost,
     getReadingTime,
-    urlListener,
+    urlListener: () => urlListener(() => {
+      resetArticleEl();
+      wallState.set("LOADING");
+    }),
     isFree: () => {
       const { article } = entities.get();
       if (!article) {
