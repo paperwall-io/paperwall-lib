@@ -1,6 +1,6 @@
 // Define the initial state
 
-import type { StoreCallback } from "@sdk/types";
+import type { StoreCallback } from "../types";
 
 // Export the state, setState, and subscribe functions
 export default <T>(initialState: T) => {
@@ -12,10 +12,13 @@ export default <T>(initialState: T) => {
   const notify = (newState: T) => {
     // Notify subscribers
     for (let i = 0; i < subscribers.length; i++) {
-      subscribers[i](newState);
+      const subscriber = subscribers[i];
+      if (subscriber) {
+        subscriber(newState);
+      }
     }
   };
-  
+
   // Define a function to update the state and notify subscribers
   function set(newState: T) {
     state = newState;

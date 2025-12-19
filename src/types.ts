@@ -17,7 +17,7 @@ export type WallState =
   | "SHOW_WALL"
   | "SHOW_ARTICLE";
 
-export type StoreCallback = (...args: any) => any;
+export type StoreCallback = (newState: any) => any;
 export type Store<T> = {
   get: () => T;
   set: (args: T) => T;
