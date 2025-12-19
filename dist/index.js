@@ -373,7 +373,7 @@ var initPaperWall = (_config) => {
     },
     detectIsPost,
     getReadingTime,
-    urlListener: () => urlListener(() => {
+    resetOnNav: () => urlListener(() => {
       resetArticleEl();
       wallState.set("LOADING");
     }),

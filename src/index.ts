@@ -104,7 +104,7 @@ const initPaperWall = (_config: WallConfig) => {
     },
     detectIsPost,
     getReadingTime,
-    urlListener: () =>
+    resetOnNav: () =>
       urlListener(() => {
         resetArticleEl();
         wallState.set("LOADING");

@@ -90,7 +90,7 @@ export declare const initPaperWall: (_config: WallConfig) => {
 	reset: () => void;
 	detectIsPost: () => boolean;
 	getReadingTime: () => number | null | undefined;
-	urlListener: () => () => void;
+	resetOnNav: () => () => void;
 	isFree: () => boolean;
 	isPreviewMode: () => true;
 	thresholds: {
