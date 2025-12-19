@@ -104,7 +104,10 @@ const initPaperWall = (_config: WallConfig) => {
     },
     detectIsPost,
     getReadingTime,
-    urlListener,
+    urlListener: urlListener(() => {
+      resetArticleEl();
+      wallState.set("LOADING");
+    }),
     isFree: () => {
       const { article } = entities.get();
       if (!article) {
@@ -117,7 +120,6 @@ const initPaperWall = (_config: WallConfig) => {
       if (!(article && flags)) {
         throw new Error("isPreviewMode: Article/flags not found");
       }
-
       return flags?.previewMode;
     },
     thresholds: {
