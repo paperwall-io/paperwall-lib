@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Upload assets to storage - ${{ github.ref_name }}
+    name: Build dist - ${{ github.ref_name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
