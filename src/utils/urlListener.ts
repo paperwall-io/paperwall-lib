@@ -1,10 +1,9 @@
-import pw from "@lib/main";
 
-export const urlListener = () => {
+export const urlListener = (apply: () => void) => {
   
   // Native events
-  window.addEventListener("hashchange", pw.reset);
-  window.addEventListener("popstate", pw.reset);
+  window.addEventListener("hashchange", apply);
+  window.addEventListener("popstate", apply);
 
   // Monkey-patch history methods
   const originalPushState = history.pushState;
@@ -12,17 +11,17 @@ export const urlListener = () => {
 
   history.pushState = function (...args) {
     originalPushState.apply(this, args);
-    pw.reset();
+    apply();
   };
 
   history.replaceState = function (...args) {
     originalReplaceState.apply(this, args);
-    pw.reset();
+    apply();
   };
 
   return () => {
-    window.removeEventListener("hashchange", pw.reset);
-    window.removeEventListener("popstate", pw.reset);
+    window.removeEventListener("hashchange", apply);
+    window.removeEventListener("popstate", apply);
     history.pushState = originalPushState;
     history.replaceState = originalReplaceState;
   };
