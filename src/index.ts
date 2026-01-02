@@ -104,6 +104,33 @@ const initPaperwall = (_config: WallConfig) => {
     },
     detectIsPost,
     getReadingTime,
+    getCta: () => {
+      const { articleSession, article } = entities.get();
+      if (!article) {
+        return console.warn("getCta: article not found");
+      }
+      if (articleSession) {
+        return (
+          config.portalUrl +
+          "/redeem?" +
+          new URLSearchParams({
+            session_id: articleSession.id,
+            article_id: article.id,
+            redirect: window.location.toString(),
+          }).toString()
+        );
+      } else {
+        return (
+          config.portalUrl +
+          "/redeem" +
+          new URLSearchParams({
+            article_id: article.id,
+            redirect: window.location.toString(),
+            mode: "member",
+          }).toString()
+        );
+      }
+    },
     resetOnNav: () =>
       urlListener(() => {
         setTimeout(() => {
