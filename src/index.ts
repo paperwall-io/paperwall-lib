@@ -169,4 +169,17 @@ const initPaperwall = (_config: WallConfig) => {
   };
 };
 
+export type {
+  WallConfig,
+  WallState,
+  WallStore,
+  Article,
+  ArticleSession,
+  ArticleReport,
+  ArticleFlags,
+  Pricing,
+  ThresholdType,
+  StoreCallback,
+} from "./types";
+
 export { initPaperwall };
