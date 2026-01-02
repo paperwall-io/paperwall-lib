@@ -202,6 +202,7 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
       tmpData: {}
     });
   } catch (err) {
+    console.warn("Error initializing session, resetting all localStorage data", err);
     entities.set({});
     localStore_default.resetAllData();
   }
@@ -209,6 +210,10 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
 
 // src/operations/initApp.ts
 var initApp = (apiOpts, config, wallState, entities) => {
+  const wallStatus = wallState.get();
+  if (wallStatus !== "LOADING") {
+    return console.warn(`App in invalid initialization state: ${wallStatus}`);
+  }
   const qParams = new URLSearchParams(window.location.search);
   const pwToken = qParams.get("paperwall-token");
   if (pwToken && pwToken === config.siteToken) {
@@ -303,7 +308,7 @@ var configDefaults = {
   apiBaseUrl: "https://api.paperwall.io",
   portalUrl: "https://paperwall.io"
 };
-var initPaperWall = (_config) => {
+var initPaperwall = (_config) => {
   let config = Object.assign(configDefaults, _config);
   const wallState = store_default("LOADING");
   const entities = store_default({});
@@ -432,5 +437,5 @@ var initPaperWall = (_config) => {
   };
 };
 export {
-  initPaperWall
+  initPaperwall
 };

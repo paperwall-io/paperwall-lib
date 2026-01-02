@@ -16,7 +16,7 @@ export type Pricing = {
 	threshold_value: number;
 };
 export type ThresholdType = "NONE" | "RATING" | "VISITS" | "DAYS" | "READS";
-export interface IArticle {
+export interface Article {
 	id: string;
 	use_ratings: number;
 	rating_score: number;
@@ -33,7 +33,7 @@ export interface IArticle {
 		description?: string;
 	};
 }
-export interface IArticleSession {
+export interface ArticleSession {
 	id: string;
 	rating: number;
 	session_token: string;
@@ -48,27 +48,27 @@ export interface IArticleSession {
 		};
 	};
 }
-export interface IArticleReport {
+export interface ArticleReport {
 	numRatings: number;
 	numVisits: number;
 	score: number;
 }
-export interface IArticleFlags {
+export interface ArticleFlags {
 	isPromoMode: true;
 	previewMode: true;
 }
 export type WallStore = {
-	article?: IArticle;
-	report?: IArticleReport;
-	articleSession?: IArticleSession;
+	article?: Article;
+	report?: ArticleReport;
+	articleSession?: ArticleSession;
 	siteSession?: string | null;
 	balance?: number;
-	flags?: IArticleFlags;
+	flags?: ArticleFlags;
 	tmpData?: {
 		articleSessionId?: string;
 	};
 };
-export declare const initPaperWall: (_config: WallConfig) => {
+export declare const initPaperwall: (_config: WallConfig) => {
 	config: WallConfig;
 	entities: {
 		get: () => WallStore;
@@ -94,8 +94,8 @@ export declare const initPaperWall: (_config: WallConfig) => {
 	isFree: () => boolean;
 	isPreviewMode: () => true;
 	thresholds: {
-		whyUnder: (article: IArticle) => "FREE! Early bird special" | "Read for FREE! Rate it after" | "Be one of the first to read, for Free!" | "Random draw!";
-		whyOver: (article: IArticle) => "Random draw!" | "Has been live for a while" | "Rated highly by other readers" | "Reade by many already";
+		whyUnder: (article: Article) => "FREE! Early bird special" | "Read for FREE! Rate it after" | "Be one of the first to read, for Free!" | "Random draw!";
+		whyOver: (article: Article) => "Random draw!" | "Has been live for a while" | "Rated highly by other readers" | "Reade by many already";
 	};
 	rateArticle: (articleId: string, sessionId: string, rating: number) => Promise<void>;
 	initArticle: () => Promise<void>;
