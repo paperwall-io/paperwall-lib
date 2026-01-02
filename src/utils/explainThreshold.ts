@@ -1,6 +1,6 @@
-import type { IArticle } from "../types";
+import type { Article } from "../types";
 
-export const explainWhyFree = (article: IArticle) => {
+export const explainWhyFree = (article: Article) => {
   if (article.threshold_type === "DAYS") {
     return "FREE! Early bird special";
   }
@@ -14,7 +14,7 @@ export const explainWhyFree = (article: IArticle) => {
   return "Random draw!";
 };
 
-export const explainPastThreshold = (article: IArticle) => {
+export const explainPastThreshold = (article: Article) => {
   if (article.threshold_type === "DAYS") {
     return "Has been live for a while";
   }

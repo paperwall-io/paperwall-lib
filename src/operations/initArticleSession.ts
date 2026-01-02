@@ -2,9 +2,9 @@ import type {
   Store,
   WallStore,
   WallState,
-  IArticle,
-  IArticleFlags,
-  IArticleReport,
+  Article,
+  ArticleFlags,
+  ArticleReport,
   ApiOpts,
 } from "../types";
 import localStore from "../utils/localStore";
@@ -34,9 +34,9 @@ export const initArticleSession = async (
   console.log("visitArticle", thisUrl, articleResp);
 
   entities.update({
-    report: articleResp.report as IArticleReport,
-    article: articleResp.article as IArticle,
-    flags: articleResp.flags as IArticleFlags,
+    report: articleResp.report as ArticleReport,
+    article: articleResp.article as Article,
+    flags: articleResp.flags as ArticleFlags,
   });
 
   const { article, report, flags } = entities.get();
@@ -79,6 +79,7 @@ export const initArticleSession = async (
       tmpData: {},
     });
   } catch (err) {
+    console.warn("Error initializing session, resetting all localStorage data", err);
     entities.set({});
     localStore.resetAllData();
   }

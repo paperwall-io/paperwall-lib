@@ -309,23 +309,23 @@ var initPaperWall = (_config) => {
   const entities = store_default({});
   let articleEl = null;
   const setArticleEl = (selector) => {
-    if (!config.articleInit) {
-      return console.warn("articleInit not configured");
+    if (!config.articleFinder) {
+      return console.warn("articleFinder not configured");
     }
-    articleEl = document.getElementById(selector || config.articleInit?.selector);
+    articleEl = document.getElementById(selector || config.articleFinder?.selector);
   };
   const resetArticleEl = () => {
     articleEl = null;
   };
   const detectIsPost = () => {
-    if (!config.articleInit) {
-      console.warn("articleInit not configured");
+    if (!config.articleFinder) {
+      console.warn("articleFinder not configured");
       return false;
     }
-    return !!articleEl && !!config.articleInit.postUrls?.length && !!config.articleInit.postUrls.find((re) => new RegExp(re).exec(window.location.pathname));
+    return !!articleEl && !!config.articleFinder.postUrls?.length && !!config.articleFinder.postUrls.find((re) => new RegExp(re).exec(window.location.pathname));
   };
   const checkWallState = () => {
-    if (config.articleInit?.selector && !articleEl) {
+    if (config.articleFinder?.selector && !articleEl) {
       console.warn("checkWallState: Post DOM element not found");
       return "NO_WALL";
     }
@@ -362,7 +362,7 @@ var initPaperWall = (_config) => {
     config,
     entities,
     wallState,
-    articleInit: {
+    articleFinder: {
       getEl: () => articleEl,
       setEl: setArticleEl,
       reset: resetArticleEl
@@ -420,7 +420,7 @@ var initPaperWall = (_config) => {
       wallState.set(checkWallState());
     },
     initApp: () => {
-      if (config.articleInit?.selector) {
+      if (config.articleFinder?.selector) {
         setArticleEl();
       }
       const apiOpts = {

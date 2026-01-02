@@ -5,7 +5,7 @@ import type { WallConfig } from 'paperwall-lib/types';
 
 const config: WallConfig = {
   siteToken: 'your-site-token',
-  articleInit: {
+  articleFinder: {
     selector: 'blog-post',
     postUrls: ['/posts/.*', '/articles/.*']
   }

@@ -11,7 +11,7 @@ const configDefaults = {
   portalUrl: "https://paperwall.io",
 };
 
-const initPaperWall = (_config: WallConfig) => {
+const initPaperwall = (_config: WallConfig) => {
   let config: WallConfig = Object.assign(configDefaults, _config);
 
   const wallState = store<WallState>("LOADING");
@@ -19,11 +19,11 @@ const initPaperWall = (_config: WallConfig) => {
   let articleEl: HTMLElement | null = null;
 
   const setArticleEl = (selector?: string) => {
-    if (!config.articleInit) {
-      return console.warn("articleInit not configured");
+    if (!config.articleFinder) {
+      return console.warn("articleFinder not configured");
     }
     articleEl = document.getElementById(
-      selector || config.articleInit?.selector
+      selector || config.articleFinder?.selector
     );
   };
   const resetArticleEl = () => {
@@ -31,21 +31,21 @@ const initPaperWall = (_config: WallConfig) => {
   };
 
   const detectIsPost = () => {
-    if (!config.articleInit) {
-      console.warn("articleInit not configured");
+    if (!config.articleFinder) {
+      console.warn("articleFinder not configured");
       return false;
     }
     return (
       !!articleEl &&
-      !!config.articleInit.postUrls?.length &&
-      !!config.articleInit.postUrls.find((re: string) =>
+      !!config.articleFinder.postUrls?.length &&
+      !!config.articleFinder.postUrls.find((re: string) =>
         new RegExp(re).exec(window.location.pathname)
       )
     );
   };
 
   const checkWallState = (): WallState => {
-    if (config.articleInit?.selector && !articleEl) {
+    if (config.articleFinder?.selector && !articleEl) {
       console.warn("checkWallState: Post DOM element not found");
       return "NO_WALL";
     }
@@ -93,7 +93,7 @@ const initPaperWall = (_config: WallConfig) => {
     config,
     entities,
     wallState,
-    articleInit: {
+    articleFinder: {
       getEl: () => articleEl,
       setEl: setArticleEl,
       reset: resetArticleEl,
@@ -157,7 +157,7 @@ const initPaperWall = (_config: WallConfig) => {
       wallState.set(checkWallState());
     },
     initApp: () => {
-      if (config.articleInit?.selector) {
+      if (config.articleFinder?.selector) {
         setArticleEl();
       }
       const apiOpts = {
@@ -169,4 +169,4 @@ const initPaperWall = (_config: WallConfig) => {
   };
 };
 
-export { initPaperWall };
+export { initPaperwall };

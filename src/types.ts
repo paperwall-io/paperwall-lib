@@ -1,6 +1,6 @@
 export interface WallConfig {
   siteToken: string;
-  articleInit?: {
+  articleFinder?: {
     selector: string;
     postUrls: string[];
   };
@@ -25,7 +25,7 @@ export type Store<T> = {
   sub: (callback: StoreCallback) => () => void;
 };
 
-export interface IUser {
+export interface PaperwallUser {
   id: string;
   balance: number;
   username: string;
@@ -37,7 +37,7 @@ export type Pricing = {
 
 export type ThresholdType = "NONE" | "RATING" | "VISITS" | "DAYS" | "READS";
 
-export interface IArticle {
+export interface Article {
   id: string;
   use_ratings: number;
   rating_score: number;
@@ -55,7 +55,7 @@ export interface IArticle {
   };
 }
 
-export interface IArticleSession {
+export interface ArticleSession {
   id: string;
   rating: number;
   session_token: string;
@@ -73,13 +73,13 @@ export interface IArticleSession {
 
 export type SiteSession = string; // is JWT
 
-export interface IArticleReport {
+export interface ArticleReport {
   numRatings: number;
   numVisits: number;
   score: number;
 }
 
-export interface IArticleFlags {
+export interface ArticleFlags {
   isPromoMode: true;
   previewMode: true;
 }
@@ -87,12 +87,12 @@ export interface IArticleFlags {
 // used by current article
 export type WallStore = {
   // user: IUser
-  article?: IArticle;
-  report?: IArticleReport;
-  articleSession?: IArticleSession;
+  article?: Article;
+  report?: ArticleReport;
+  articleSession?: ArticleSession;
   siteSession?: string | null;
   balance?: number;
-  flags?: IArticleFlags;
+  flags?: ArticleFlags;
   tmpData?: {
     articleSessionId?: string;
   };

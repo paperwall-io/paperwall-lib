@@ -2,7 +2,7 @@
 
 export interface WallConfig {
 	siteToken: string;
-	articleInit?: {
+	articleFinder?: {
 		selector: string;
 		postUrls: string[];
 	};
@@ -82,7 +82,7 @@ export declare const initPaperWall: (_config: WallConfig) => {
 		set: (newState: WallState) => WallState;
 		sub: (callback: StoreCallback) => () => void;
 	};
-	articleInit: {
+	articleFinder: {
 		getEl: () => HTMLElement | null;
 		setEl: (selector?: string) => void;
 		reset: () => void;

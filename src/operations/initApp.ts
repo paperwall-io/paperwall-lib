@@ -14,6 +14,11 @@ export const initApp = (
   wallState: Store<WallState>,
   entities: Store<WallStore>
 ) => {
+  const wallStatus = wallState.get();
+  if (wallStatus !== "LOADING") {
+    return console.warn(`App in invalid initialization state: ${wallStatus}`);
+  }
+
   const qParams = new URLSearchParams(window.location.search);
 
   const pwToken = qParams.get("paperwall-token");

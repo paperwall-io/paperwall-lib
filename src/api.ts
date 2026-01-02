@@ -1,8 +1,8 @@
 import type {
-  IArticleSession,
-  IArticle,
-  IArticleFlags,
-  IArticleReport,
+  ArticleSession,
+  Article,
+  ArticleFlags,
+  ArticleReport,
   SiteSession,
 } from "./types";
 import { apiFetch } from "./utils/apiFetch";
@@ -26,7 +26,7 @@ export const api = ({
       articleId: string,
       sessionId: string | null
     ): Promise<{
-      articleSession: IArticleSession;
+      articleSession: ArticleSession;
       balance: number;
     }> => {
       const { articleSession, balance } = await apiClient(
@@ -44,9 +44,9 @@ export const api = ({
     visitArticle: async (
       url: string
     ): Promise<{
-      article: IArticle | null;
-      report: IArticleReport | null;
-      flags: IArticleFlags | null;
+      article: Article | null;
+      report: ArticleReport | null;
+      flags: ArticleFlags | null;
     }> => {
       try {
         const { article, report, flags } = await apiClient(
