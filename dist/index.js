@@ -390,7 +390,7 @@ var initPaperwall = (_config) => {
           redirect: window.location.toString()
         }).toString();
       } else {
-        return config.portalUrl + "/redeem" + new URLSearchParams({
+        return config.portalUrl + "/redeem?" + new URLSearchParams({
           article_id: article.id,
           redirect: window.location.toString(),
           mode: "member"

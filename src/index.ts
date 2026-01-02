@@ -122,7 +122,7 @@ const initPaperwall = (_config: WallConfig) => {
       } else {
         return (
           config.portalUrl +
-          "/redeem" +
+          "/redeem?" +
           new URLSearchParams({
             article_id: article.id,
             redirect: window.location.toString(),
