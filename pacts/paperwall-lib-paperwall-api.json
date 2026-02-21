@@ -1,0 +1,231 @@
+{
+  "consumer": {
+    "name": "paperwall-lib"
+  },
+  "interactions": [
+    {
+      "description": "a request for a non-existent article returns 404",
+      "providerState": "no article exists",
+      "request": {
+        "body": {
+          "sessionId": null
+        },
+        "headers": {
+          "Content-Type": "application/json",
+          "app-origin": "embed",
+          "app-site-session": "valid-site-session-token"
+        },
+        "method": "POST",
+        "path": "/articles/non-existent-id/session"
+      },
+      "response": {
+        "body": {
+          "errors": [
+            {
+              "message": "Article not found"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 404
+      }
+    },
+    {
+      "description": "a request to create a new article session",
+      "providerState": "an article exists",
+      "request": {
+        "body": {
+          "sessionId": null
+        },
+        "headers": {
+          "Content-Type": "application/json",
+          "app-origin": "embed",
+          "app-site-session": "valid-site-session-token"
+        },
+        "method": "POST",
+        "path": "/articles/pact-article-id/session"
+      },
+      "response": {
+        "body": {
+          "articleSession": {
+            "article_id": "article-id",
+            "data": {
+              "has_purchased": true,
+              "is_site_member": false,
+              "pricing": {
+                "num_tickets": 0,
+                "threshold_value": 100
+              }
+            },
+            "id": "session-id"
+          },
+          "balance": 0
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.articleSession": {
+            "match": "type"
+          },
+          "$.body.articleSession.data": {
+            "match": "type"
+          },
+          "$.body.articleSession.data.pricing": {
+            "match": "type"
+          },
+          "$.body.balance": {
+            "match": "type"
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to rate a purchased article",
+      "providerState": "an article exists with a purchased session",
+      "request": {
+        "body": {
+          "rating": 4
+        },
+        "headers": {
+          "Content-Type": "application/json",
+          "app-origin": "embed",
+          "app-site-session": "valid-site-session-token"
+        },
+        "method": "POST",
+        "path": "/articles/pact-article-id/session/pact-session-id/rate"
+      },
+      "response": {
+        "body": {
+          "article": {
+            "id": "article-id",
+            "title": "Article Title"
+          },
+          "articleSession": {
+            "id": "session-id"
+          },
+          "report": {
+            "dailyReads": 0,
+            "numRatings": 1,
+            "numReads": 0,
+            "score": 4
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.article": {
+            "match": "type"
+          },
+          "$.body.articleSession": {
+            "match": "type"
+          },
+          "$.body.report.dailyReads": {
+            "match": "type"
+          },
+          "$.body.report.numRatings": {
+            "match": "type"
+          },
+          "$.body.report.numReads": {
+            "match": "type"
+          },
+          "$.body.report.score": {
+            "match": "type"
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to rate an unpurchased article returns 400",
+      "providerState": "an article exists with an unpurchased session",
+      "request": {
+        "body": {
+          "rating": 4
+        },
+        "headers": {
+          "Content-Type": "application/json",
+          "app-origin": "embed",
+          "app-site-session": "valid-site-session-token"
+        },
+        "method": "POST",
+        "path": "/articles/pact-article-id/session/unpurchased-session-id/rate"
+      },
+      "response": {
+        "body": {
+          "errors": [
+            {
+              "message": "Article not yet purchased"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 400
+      }
+    },
+    {
+      "description": "a request to retrieve an existing purchased session",
+      "providerState": "an article exists with a purchased session",
+      "request": {
+        "body": {
+          "sessionId": "pact-session-id"
+        },
+        "headers": {
+          "Content-Type": "application/json",
+          "app-origin": "embed",
+          "app-site-session": "valid-site-session-token"
+        },
+        "method": "POST",
+        "path": "/articles/pact-article-id/session"
+      },
+      "response": {
+        "body": {
+          "articleSession": {
+            "article_id": "article-id",
+            "data": {
+              "has_purchased": true
+            },
+            "id": "session-id"
+          },
+          "balance": 0
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "$.body.articleSession": {
+            "match": "type"
+          },
+          "$.body.articleSession.data": {
+            "match": "type"
+          },
+          "$.body.balance": {
+            "match": "type"
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "16.2.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.28",
+      "models": "1.3.5"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "paperwall-api"
+  }
+}

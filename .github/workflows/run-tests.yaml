@@ -26,7 +26,7 @@ jobs:
               -H "Content-Type: application/json" \
               -u "${{ vars.PACT_BROKER_USERNAME }}:${{ secrets.PACT_BROKER_PASSWORD }}" \
               -d @"$pact_file" \
-              "${{ vars.PACT_BROKER_URL }}/pacts/provider/paperwall-api/consumer/embed-consumer/version/${{ github.sha }}?tag=${{ github.ref_name }}"
+              "${{ vars.PACT_BROKER_URL }}/pacts/provider/paperwall-api/consumer/paperwall-lib/version/${{ github.sha }}?tag=${{ github.ref_name }}"
           done
 
       - name: Can I deploy?
@@ -34,7 +34,7 @@ jobs:
         run: |
           docker run --rm pactfoundation/pact-cli:latest \
             broker can-i-deploy \
-            --pacticipant embed-consumer \
+            --pacticipant paperwall-lib \
             --version ${{ github.sha }} \
             --broker-base-url ${{ vars.PACT_BROKER_URL }} \
             --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
