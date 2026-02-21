@@ -1,6 +1,6 @@
 # See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
 
-name: Uploading assets
+name: Run tests
 on:
   push:
     branch: [main]
@@ -22,7 +22,7 @@ jobs:
         run: |
           for pact_file in pacts/*.json; do
             echo "Publishing $pact_file..."
-            curl -X PUT \
+            curl --fail -X PUT \
               -H "Content-Type: application/json" \
               -u "${{ vars.PACT_BROKER_USERNAME }}:${{ secrets.PACT_BROKER_PASSWORD }}" \
               -d @"$pact_file" \
@@ -36,7 +36,6 @@ jobs:
             broker can-i-deploy \
             --pacticipant embed-consumer \
             --version ${{ github.sha }} \
-            --to-environment production \
             --broker-base-url ${{ vars.PACT_BROKER_URL }} \
             --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
             --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
