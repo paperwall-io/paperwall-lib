@@ -6,8 +6,8 @@ on:
     branch: [main]
 
 jobs:
-  deploy:
-    name: Build dist - ${{ github.ref_name }}
+  verify-contracts:
+    name: Verify against api - ${{ github.ref_name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,6 +1,6 @@
 {
   "consumer": {
-    "name": "paperwall-lib"
+    "name": "embed-consumer"
   },
   "interactions": [
     {

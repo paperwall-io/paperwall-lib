@@ -1,4 +1,4 @@
-import { describe, beforeAll, afterAll, test, expect } from "bun:test";
+import { describe, beforeAll, afterEach, test, expect } from "bun:test";
 import { PactV2 as Pact, MatchersV2 } from "@pact-foundation/pact";
 import path from "path";
 
@@ -34,9 +34,10 @@ const commonRequestHeaders = {
 describe("Embed Consumer Contract Tests", () => {
   beforeAll(() => provider.setup());
 
-  afterAll(() => provider.finalize());
+  // verify() writes the pact file and resets the mock server for the next test
+  afterEach(() => provider.verify());
 
-  test("a request to create a new article session", async () => {
+  test("creates a new article session", async () => {
     await provider.addInteraction({
       state: "an article exists",
       uponReceiving: "a request to create a new article session",
@@ -66,14 +67,12 @@ describe("Embed Consumer Contract Tests", () => {
 
     const result = await embedApi.getOrCreateArticleSession("pact-article-id", null);
 
-    await provider.verify();
-
     expect(result.articleSession).toBeDefined();
     expect(result.articleSession.id).toBeString();
     expect(typeof result.balance).toBe("number");
   });
 
-  test("a request to retrieve an existing purchased session", async () => {
+  test("retrieves an existing purchased session", async () => {
     await provider.addInteraction({
       state: "an article exists with a purchased session",
       uponReceiving: "a request to retrieve an existing purchased session",
@@ -99,12 +98,10 @@ describe("Embed Consumer Contract Tests", () => {
 
     const result = await embedApi.getOrCreateArticleSession("pact-article-id", "pact-session-id");
 
-    await provider.verify();
-
     expect(result.articleSession.data.has_purchased).toBe(true);
   });
 
-  test("a request to rate a purchased article", async () => {
+  test("rates a purchased article", async () => {
     await provider.addInteraction({
       state: "an article exists with a purchased session",
       uponReceiving: "a request to rate a purchased article",
@@ -132,14 +129,12 @@ describe("Embed Consumer Contract Tests", () => {
 
     const result = await embedApi.rateArticle("pact-article-id", "pact-session-id", 4);
 
-    await provider.verify();
-
     expect(result.article).toBeDefined();
     expect(result.articleSession).toBeDefined();
     expect(result.report).toBeDefined();
   });
 
-  test("a request for a non-existent article returns 404", async () => {
+  test("returns 404 for a non-existent article", async () => {
     await provider.addInteraction({
       state: "no article exists",
       uponReceiving: "a request for a non-existent article returns 404",
@@ -160,14 +155,12 @@ describe("Embed Consumer Contract Tests", () => {
 
     const result = await embedApi.getOrCreateArticleSession("non-existent-id", null);
 
-    await provider.verify();
-
     // api.ts destructures { articleSession, balance } — both undefined when API returns errors
     expect(result.articleSession).toBeUndefined();
     expect(result.balance).toBeUndefined();
   });
 
-  test("a request to rate an unpurchased article returns 400", async () => {
+  test("returns 400 when rating an unpurchased article", async () => {
     await provider.addInteraction({
       state: "an article exists with an unpurchased session",
       uponReceiving: "a request to rate an unpurchased article returns 400",
@@ -187,8 +180,6 @@ describe("Embed Consumer Contract Tests", () => {
     });
 
     const result = await embedApi.rateArticle("pact-article-id", "unpurchased-session-id", 4);
-
-    await provider.verify();
 
     // api.ts extracts { articleSession, article, report } — all undefined when API returns errors
     expect(result.articleSession).toBeUndefined();
