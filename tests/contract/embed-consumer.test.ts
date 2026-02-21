@@ -13,7 +13,7 @@ const PACT_PORT = 2345;
 const siteSession = "valid-site-session-token";
 
 const provider = new Pact({
-  consumer: "embed-consumer",
+  consumer: "paperwall-lib",
   provider: "paperwall-api",
   port: PACT_PORT,
   dir: path.resolve(__dirname, "../../pacts"),
