@@ -6,7 +6,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "bun build.ts"
+    "build": "bun build.ts",
+    "test:contract": "bun test tests/contract/"
   },
   "exports": {
     ".": {
@@ -27,6 +28,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@pact-foundation/pact": "^16.2.0",
     "@types/bun": "latest",
     "bun-plugin-dts": "^0.3.0"
   },
