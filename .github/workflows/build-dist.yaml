@@ -1,8 +1,7 @@
 # See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
 
-name: Uploading assets
+name: Build library
 on:
-  workflow_dispatch:
   create:
     tags: [v*]
 
@@ -16,30 +15,4 @@ jobs:
         with:
           bun-version: 1.1.45
       - run: bun install
-      - run: bun run test:contract
-
-      - name: Publish pacts to broker
-        if: ${{ vars.PACT_BROKER_URL != '' }}
-        run: |
-          for pact_file in pacts/*.json; do
-            echo "Publishing $pact_file..."
-            curl -X PUT \
-              -H "Content-Type: application/json" \
-              -u "${{ vars.PACT_BROKER_USERNAME }}:${{ secrets.PACT_BROKER_PASSWORD }}" \
-              -d @"$pact_file" \
-              "${{ vars.PACT_BROKER_URL }}/pacts/provider/paperwall-api/consumer/embed-consumer/version/${{ github.sha }}?tag=${{ github.ref_name }}"
-          done
-
-      - name: Can I deploy?
-        if: ${{ vars.PACT_BROKER_URL != '' }}
-        run: |
-          docker run --rm pactfoundation/pact-cli:latest \
-            broker can-i-deploy \
-            --pacticipant embed-consumer \
-            --version ${{ github.sha }} \
-            --to-environment production \
-            --broker-base-url ${{ vars.PACT_BROKER_URL }} \
-            --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
-            --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
-
       - run: bun run build
