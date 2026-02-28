@@ -13,7 +13,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
         },
         "method": "POST",
         "path": "/articles/non-existent-id/session"
@@ -42,7 +42,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session"
@@ -93,7 +93,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session/pact-session-id/rate"
@@ -150,7 +150,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session/unpurchased-session-id/rate"
@@ -179,7 +179,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session"

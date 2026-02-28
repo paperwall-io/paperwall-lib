@@ -29,8 +29,10 @@
   "license": "MIT",
   "devDependencies": {
     "@pact-foundation/pact": "^16.2.0",
+    "@panva/hkdf": "^1.2.1",
     "@types/bun": "latest",
-    "bun-plugin-dts": "^0.3.0"
+    "bun-plugin-dts": "^0.3.0",
+    "jose": "^5.9.3"
   },
   "peerDependencies": {
     "typescript": "^5"
