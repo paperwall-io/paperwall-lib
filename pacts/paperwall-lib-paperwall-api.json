@@ -5,7 +5,11 @@
   "interactions": [
     {
       "description": "a request for a non-existent article returns 404",
-      "providerState": "no article exists",
+      "providerStates": [
+        {
+          "name": "no article exists"
+        }
+      ],
       "request": {
         "body": {
           "sessionId": null
@@ -13,7 +17,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..drTnyL-Ib8_sAkm6sozuAg.XqasbIfvg4NKk46Fp8Wg1YnpE4BtK5MHSqf0QiyO3oQjWqnQ3FUUWoikUiqtU1xmXQs9oVz02Z1NJQ6p6uEZAlqk5caMCj2BLLupP2lzvr-WH6pw36MmaiBe8kupMSfpXXzCojsj9jnwNnuSHekM9iKyCk98H76GaTuGiQmIgEN0x9OH1YRNvUl_7C6o1NARr90h9dnywvErtAiIHuPHLvMXe7_ytieCOYIybNp86eaairCC0EzLkKIlbFocAVmegzsUaIlRiW-XpBnBr2okSQ.XUC4GA0t-1T8j3soCgKEPkjHXSnYw_glCerpprufia8"
         },
         "method": "POST",
         "path": "/articles/non-existent-id/session"
@@ -34,7 +38,11 @@
     },
     {
       "description": "a request to create a new article session",
-      "providerState": "an article exists",
+      "providerStates": [
+        {
+          "name": "an article exists"
+        }
+      ],
       "request": {
         "body": {
           "sessionId": null
@@ -42,7 +50,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..drTnyL-Ib8_sAkm6sozuAg.XqasbIfvg4NKk46Fp8Wg1YnpE4BtK5MHSqf0QiyO3oQjWqnQ3FUUWoikUiqtU1xmXQs9oVz02Z1NJQ6p6uEZAlqk5caMCj2BLLupP2lzvr-WH6pw36MmaiBe8kupMSfpXXzCojsj9jnwNnuSHekM9iKyCk98H76GaTuGiQmIgEN0x9OH1YRNvUl_7C6o1NARr90h9dnywvErtAiIHuPHLvMXe7_ytieCOYIybNp86eaairCC0EzLkKIlbFocAVmegzsUaIlRiW-XpBnBr2okSQ.XUC4GA0t-1T8j3soCgKEPkjHXSnYw_glCerpprufia8"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session"
@@ -67,17 +75,39 @@
           "Content-Type": "application/json"
         },
         "matchingRules": {
-          "$.body.articleSession": {
-            "match": "type"
-          },
-          "$.body.articleSession.data": {
-            "match": "type"
-          },
-          "$.body.articleSession.data.pricing": {
-            "match": "type"
-          },
-          "$.body.balance": {
-            "match": "type"
+          "body": {
+            "$.articleSession": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.articleSession.data": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.articleSession.data.pricing": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.balance": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
           }
         },
         "status": 200
@@ -85,7 +115,11 @@
     },
     {
       "description": "a request to rate a purchased article",
-      "providerState": "an article exists with a purchased session",
+      "providerStates": [
+        {
+          "name": "an article exists with a purchased session"
+        }
+      ],
       "request": {
         "body": {
           "rating": 4
@@ -93,7 +127,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..drTnyL-Ib8_sAkm6sozuAg.XqasbIfvg4NKk46Fp8Wg1YnpE4BtK5MHSqf0QiyO3oQjWqnQ3FUUWoikUiqtU1xmXQs9oVz02Z1NJQ6p6uEZAlqk5caMCj2BLLupP2lzvr-WH6pw36MmaiBe8kupMSfpXXzCojsj9jnwNnuSHekM9iKyCk98H76GaTuGiQmIgEN0x9OH1YRNvUl_7C6o1NARr90h9dnywvErtAiIHuPHLvMXe7_ytieCOYIybNp86eaairCC0EzLkKIlbFocAVmegzsUaIlRiW-XpBnBr2okSQ.XUC4GA0t-1T8j3soCgKEPkjHXSnYw_glCerpprufia8"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session/pact-session-id/rate"
@@ -118,23 +152,55 @@
           "Content-Type": "application/json"
         },
         "matchingRules": {
-          "$.body.article": {
-            "match": "type"
-          },
-          "$.body.articleSession": {
-            "match": "type"
-          },
-          "$.body.report.dailyReads": {
-            "match": "type"
-          },
-          "$.body.report.numRatings": {
-            "match": "type"
-          },
-          "$.body.report.numReads": {
-            "match": "type"
-          },
-          "$.body.report.score": {
-            "match": "type"
+          "body": {
+            "$.article": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.articleSession": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.report.dailyReads": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.report.numRatings": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.report.numReads": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.report.score": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
           }
         },
         "status": 200
@@ -142,7 +208,11 @@
     },
     {
       "description": "a request to rate an unpurchased article returns 400",
-      "providerState": "an article exists with an unpurchased session",
+      "providerStates": [
+        {
+          "name": "an article exists with an unpurchased session"
+        }
+      ],
       "request": {
         "body": {
           "rating": 4
@@ -150,7 +220,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..drTnyL-Ib8_sAkm6sozuAg.XqasbIfvg4NKk46Fp8Wg1YnpE4BtK5MHSqf0QiyO3oQjWqnQ3FUUWoikUiqtU1xmXQs9oVz02Z1NJQ6p6uEZAlqk5caMCj2BLLupP2lzvr-WH6pw36MmaiBe8kupMSfpXXzCojsj9jnwNnuSHekM9iKyCk98H76GaTuGiQmIgEN0x9OH1YRNvUl_7C6o1NARr90h9dnywvErtAiIHuPHLvMXe7_ytieCOYIybNp86eaairCC0EzLkKIlbFocAVmegzsUaIlRiW-XpBnBr2okSQ.XUC4GA0t-1T8j3soCgKEPkjHXSnYw_glCerpprufia8"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session/unpurchased-session-id/rate"
@@ -171,7 +241,11 @@
     },
     {
       "description": "a request to retrieve an existing purchased session",
-      "providerState": "an article exists with a purchased session",
+      "providerStates": [
+        {
+          "name": "an article exists with a purchased session"
+        }
+      ],
       "request": {
         "body": {
           "sessionId": "pact-session-id"
@@ -179,7 +253,7 @@
         "headers": {
           "Content-Type": "application/json",
           "app-origin": "embed",
-          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..cbxqTQK9qizFvd6D7Rldnw.PZJNujVDTL8rX6cl0D2MvjF856u-UHaryGtjm8ZJhtwjRMG9HyndBL9WNy9ODKZhc6JTuHnkky9RuzlokixaukLhYkd2c-WknmsjXxScTFOb1X4zSzh9TYOwP9iZ1H6OFj9tJg-kiEgK-I4twEbdMBHD8-TJ4-2QbIDhP5Plh7to5YAHY_-LQ2av4UejInDleG5RDuBYAoW_bqQc_Zz57aMqgLb1xYNLNYlKitqamuBUO6M5XVJQJvl_2TaHRQWYmzOPnzNdt9sVLlwIn7oLsw.SUEwp4SAgUgvjFFicQbR2m1KQnUM8T1Iu4z_38MvpXg"
+          "app-site-session": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoid2hWY3VyMG8xNFAtMjN1RUptSjNmVlRaWjcyZHRlMkhUNVlGX2hQaUlQdXFiRFJOeDZpSUdmUmp6TVlKbTBmem1IM2p2dGxvRW5iVkxFeWQ1YTdZQVEifQ..drTnyL-Ib8_sAkm6sozuAg.XqasbIfvg4NKk46Fp8Wg1YnpE4BtK5MHSqf0QiyO3oQjWqnQ3FUUWoikUiqtU1xmXQs9oVz02Z1NJQ6p6uEZAlqk5caMCj2BLLupP2lzvr-WH6pw36MmaiBe8kupMSfpXXzCojsj9jnwNnuSHekM9iKyCk98H76GaTuGiQmIgEN0x9OH1YRNvUl_7C6o1NARr90h9dnywvErtAiIHuPHLvMXe7_ytieCOYIybNp86eaairCC0EzLkKIlbFocAVmegzsUaIlRiW-XpBnBr2okSQ.XUC4GA0t-1T8j3soCgKEPkjHXSnYw_glCerpprufia8"
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session"
@@ -199,14 +273,31 @@
           "Content-Type": "application/json"
         },
         "matchingRules": {
-          "$.body.articleSession": {
-            "match": "type"
-          },
-          "$.body.articleSession.data": {
-            "match": "type"
-          },
-          "$.body.balance": {
-            "match": "type"
+          "body": {
+            "$.articleSession": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.articleSession.data": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.balance": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
           }
         },
         "status": 200
@@ -222,7 +313,7 @@
       "models": "1.3.5"
     },
     "pactSpecification": {
-      "version": "2.0.0"
+      "version": "3.0.0"
     }
   },
   "provider": {
