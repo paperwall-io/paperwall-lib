@@ -1,8 +1,6 @@
 import { describe, test, expect } from "bun:test";
 import { PactV3, MatchersV3 } from "@pact-foundation/pact";
 import path from "path";
-import { hkdf } from "@panva/hkdf";
-import { EncryptJWT, base64url, calculateJwkThumbprint } from "jose";
 
 const { like, integer } = MatchersV3;
 
@@ -11,41 +9,14 @@ const { like, integer } = MatchersV3;
 
 import { api } from "../../src/api";
 
-// JWT generation — mirrors API's authJwts.ts encode logic
-// siteSession tokens use salt=JWT_SECRET for both key derivation and HKDF salt
-const JWT_SECRET = process.env.JWT_SECRET || "SuperSecretPaperWallJWTCode";
-
-async function getDerivedEncryptionKey(keyMaterial: string, salt: string) {
-  return await hkdf("sha256", keyMaterial, salt, `Auth.js Generated Encryption Key (${salt})`, 64);
-}
-
-async function encodeSiteSession(payload: Record<string, unknown>): Promise<string> {
-  const salt = JWT_SECRET;
-  const encryptionSecret = await getDerivedEncryptionKey(JWT_SECRET, salt);
-  const thumbprint = await calculateJwkThumbprint(
-    { kty: "oct", k: base64url.encode(encryptionSecret) },
-    "sha512",
-  );
-  return new EncryptJWT(payload)
-    .setProtectedHeader({ alg: "dir", enc: "A256CBC-HS512", kid: thumbprint })
-    .setIssuedAt()
-    .setExpirationTime(Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60)
-    .setJti(crypto.randomUUID())
-    .encrypt(encryptionSecret);
-}
-
-// Generate a real siteSession JWT matching the API's expected format
-const siteSession = await encodeSiteSession({
-  userId: "user-visitor-001",
-  siteId: "site-001",
-  siteSessionId: "pact-site-session",
-  dateCreated: new Date().toISOString(),
-});
+// Use a placeholder token — the provider's requestFilter replaces this with a
+// properly authenticated siteSession during verification.
+const siteSession = "valid-site-session-token";
 
 const pact = new PactV3({
   consumer: "paperwall-lib",
   provider: "paperwall-api",
-  dir: path.resolve(__dirname, "../../pacts"),
+  dir: path.resolve(__dirname, "pacts"),
   logLevel: "error",
 });
 

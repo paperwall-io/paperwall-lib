@@ -20,7 +20,7 @@ jobs:
       - name: Publish pacts to broker
         if: ${{ vars.PACT_BROKER_URL != '' }}
         run: |
-          for pact_file in pacts/*.json; do
+          for pact_file in tests/contract/pacts/*.json; do
             echo "Publishing $pact_file..."
             curl --fail -X PUT \
               -H "Content-Type: application/json" \
