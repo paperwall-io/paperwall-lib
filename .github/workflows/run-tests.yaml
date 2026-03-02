@@ -9,6 +9,7 @@ jobs:
   verify-contracts:
     name: Verify against api - ${{ github.ref_name }}
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
