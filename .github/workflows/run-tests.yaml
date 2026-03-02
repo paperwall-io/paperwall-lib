@@ -9,6 +9,7 @@ jobs:
   verify-contracts:
     name: Verify against api - ${{ github.ref_name }}
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -24,7 +25,6 @@ jobs:
             -v ${{ github.workspace }}/tests/contract/pacts:/pacts \
             pactfoundation/pact-cli:latest \
             publish /pacts \
-            --to-environment production \
             --consumer-app-version ${{ github.sha }} \
             --branch ${{ github.ref_name }} \
             --broker-base-url ${{ vars.PACT_BROKER_URL }} \
