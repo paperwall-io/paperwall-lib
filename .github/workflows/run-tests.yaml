@@ -20,14 +20,15 @@ jobs:
       - name: Publish pacts to broker
         if: ${{ vars.PACT_BROKER_URL != '' }}
         run: |
-          for pact_file in tests/contract/pacts/*.json; do
-            echo "Publishing $pact_file..."
-            curl --fail -X PUT \
-              -H "Content-Type: application/json" \
-              -u "${{ vars.PACT_BROKER_USERNAME }}:${{ secrets.PACT_BROKER_PASSWORD }}" \
-              -d @"$pact_file" \
-              "${{ vars.PACT_BROKER_URL }}/pacts/provider/paperwall-api/consumer/paperwall-lib/version/${{ github.sha }}?tag=${{ github.ref_name }}"
-          done
+          docker run --rm \
+            -v ${{ github.workspace }}/tests/contract/pacts:/pacts \
+            pactfoundation/pact-cli:latest \
+            publish /pacts \
+            --consumer-app-version ${{ github.sha }} \
+            --branch ${{ github.ref_name }} \
+            --broker-base-url ${{ vars.PACT_BROKER_URL }} \
+            --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
+            --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
 
       - name: Can I deploy?
         if: ${{ vars.PACT_BROKER_URL != '' }}
