@@ -44,3 +44,15 @@ jobs:
             --broker-base-url ${{ vars.PACT_BROKER_URL }} \
             --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
             --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
+
+      - name: Record deployment
+        if: ${{ vars.PACT_BROKER_URL != '' }}
+        run: |
+          docker run --rm pactfoundation/pact-cli:latest \
+            broker record-deployment \
+            --pacticipant paperwall-lib \
+            --version ${{ github.sha }} \
+            --environment production \
+            --broker-base-url ${{ vars.PACT_BROKER_URL }} \
+            --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
+            --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
