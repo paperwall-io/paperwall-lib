@@ -38,6 +38,8 @@ jobs:
             broker can-i-deploy \
             --pacticipant paperwall-lib \
             --version ${{ github.sha }} \
+            --retry-while-unknown 12 \
+            --retry-interval 30 \
             --to-environment production \
             --broker-base-url ${{ vars.PACT_BROKER_URL }} \
             --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
