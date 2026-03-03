@@ -5,6 +5,7 @@
   "interactions": [
     {
       "description": "a request for a non-existent article returns 404",
+      "pending": false,
       "providerStates": [
         {
           "name": "no article exists"
@@ -12,32 +13,66 @@
       ],
       "request": {
         "body": {
-          "sessionId": null
+          "content": {
+            "sessionId": null
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "generators": {
+          "path": {
+            "expression": "/articles/${articleId}/session",
+            "type": "ProviderState"
+          }
         },
         "headers": {
-          "Content-Type": "application/json",
-          "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "Content-Type": [
+            "application/json"
+          ],
+          "app-origin": [
+            "embed"
+          ],
+          "app-site-session": [
+            "valid-site-session-token"
+          ]
+        },
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
         },
         "method": "POST",
         "path": "/articles/non-existent-id/session"
       },
       "response": {
         "body": {
-          "errors": [
-            {
-              "message": "Article not found"
-            }
-          ]
+          "content": {
+            "errors": [
+              {
+                "message": "Article not found"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": [
+            "application/json"
+          ]
         },
         "status": 404
-      }
+      },
+      "type": "Synchronous/HTTP"
     },
     {
       "description": "a request to create a new article session",
+      "pending": false,
       "providerStates": [
         {
           "name": "an article exists"
@@ -45,34 +80,66 @@
       ],
       "request": {
         "body": {
-          "sessionId": null
+          "content": {
+            "sessionId": null
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "generators": {
+          "path": {
+            "expression": "/articles/${articleId}/session",
+            "type": "ProviderState"
+          }
         },
         "headers": {
-          "Content-Type": "application/json",
-          "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "Content-Type": [
+            "application/json"
+          ],
+          "app-origin": [
+            "embed"
+          ],
+          "app-site-session": [
+            "valid-site-session-token"
+          ]
+        },
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session"
       },
       "response": {
         "body": {
-          "articleSession": {
-            "article_id": "article-id",
-            "data": {
-              "has_purchased": true,
-              "is_site_member": false,
-              "pricing": {
-                "num_tickets": 0,
-                "threshold_value": 100
-              }
+          "content": {
+            "articleSession": {
+              "article_id": "article-id",
+              "data": {
+                "has_purchased": true,
+                "is_site_member": false,
+                "pricing": {
+                  "num_tickets": 0,
+                  "threshold_value": 100
+                }
+              },
+              "id": "session-id"
             },
-            "id": "session-id"
+            "balance": 0
           },
-          "balance": 0
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": [
+            "application/json"
+          ]
         },
         "matchingRules": {
           "body": {
@@ -111,10 +178,12 @@
           }
         },
         "status": 200
-      }
+      },
+      "type": "Synchronous/HTTP"
     },
     {
       "description": "a request to rate a purchased article",
+      "pending": false,
       "providerStates": [
         {
           "name": "an article exists with a purchased session"
@@ -122,34 +191,66 @@
       ],
       "request": {
         "body": {
-          "rating": 4
+          "content": {
+            "rating": 4
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "generators": {
+          "path": {
+            "expression": "/articles/${articleId}/session/${sessionId}/rate",
+            "type": "ProviderState"
+          }
         },
         "headers": {
-          "Content-Type": "application/json",
-          "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "Content-Type": [
+            "application/json"
+          ],
+          "app-origin": [
+            "embed"
+          ],
+          "app-site-session": [
+            "valid-site-session-token"
+          ]
+        },
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session/pact-session-id/rate"
       },
       "response": {
         "body": {
-          "article": {
-            "id": "article-id",
-            "title": "Article Title"
+          "content": {
+            "article": {
+              "id": "article-id",
+              "title": "Article Title"
+            },
+            "articleSession": {
+              "id": "session-id"
+            },
+            "report": {
+              "dailyReads": 0,
+              "numRatings": 1,
+              "numReads": 0,
+              "score": 4
+            }
           },
-          "articleSession": {
-            "id": "session-id"
-          },
-          "report": {
-            "dailyReads": 0,
-            "numRatings": 1,
-            "numReads": 0,
-            "score": 4
-          }
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": [
+            "application/json"
+          ]
         },
         "matchingRules": {
           "body": {
@@ -204,10 +305,12 @@
           }
         },
         "status": 200
-      }
+      },
+      "type": "Synchronous/HTTP"
     },
     {
       "description": "a request to rate an unpurchased article returns 400",
+      "pending": false,
       "providerStates": [
         {
           "name": "an article exists with an unpurchased session"
@@ -215,32 +318,66 @@
       ],
       "request": {
         "body": {
-          "rating": 4
+          "content": {
+            "rating": 4
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "generators": {
+          "path": {
+            "expression": "/articles/${articleId}/session/${sessionId}/rate",
+            "type": "ProviderState"
+          }
         },
         "headers": {
-          "Content-Type": "application/json",
-          "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "Content-Type": [
+            "application/json"
+          ],
+          "app-origin": [
+            "embed"
+          ],
+          "app-site-session": [
+            "valid-site-session-token"
+          ]
+        },
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session/unpurchased-session-id/rate"
       },
       "response": {
         "body": {
-          "errors": [
-            {
-              "message": "Article not yet purchased"
-            }
-          ]
+          "content": {
+            "errors": [
+              {
+                "message": "Article not yet purchased"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": [
+            "application/json"
+          ]
         },
         "status": 400
-      }
+      },
+      "type": "Synchronous/HTTP"
     },
     {
       "description": "a request to retrieve an existing purchased session",
+      "pending": false,
       "providerStates": [
         {
           "name": "an article exists with a purchased session"
@@ -248,29 +385,77 @@
       ],
       "request": {
         "body": {
-          "sessionId": "pact-session-id"
+          "content": {
+            "sessionId": "pact-session-id"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "generators": {
+          "body": {
+            "$.sessionId": {
+              "expression": "${sessionId}",
+              "type": "ProviderState"
+            }
+          },
+          "path": {
+            "expression": "/articles/${articleId}/session",
+            "type": "ProviderState"
+          }
         },
         "headers": {
-          "Content-Type": "application/json",
-          "app-origin": "embed",
-          "app-site-session": "valid-site-session-token"
+          "Content-Type": [
+            "application/json"
+          ],
+          "app-origin": [
+            "embed"
+          ],
+          "app-site-session": [
+            "valid-site-session-token"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.sessionId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          }
         },
         "method": "POST",
         "path": "/articles/pact-article-id/session"
       },
       "response": {
         "body": {
-          "articleSession": {
-            "article_id": "article-id",
-            "data": {
-              "has_purchased": true
+          "content": {
+            "articleSession": {
+              "article_id": "article-id",
+              "data": {
+                "has_purchased": true
+              },
+              "id": "session-id"
             },
-            "id": "session-id"
+            "balance": 0
           },
-          "balance": 0
+          "contentType": "application/json",
+          "encoded": false
         },
         "headers": {
-          "Content-Type": "application/json"
+          "Content-Type": [
+            "application/json"
+          ]
         },
         "matchingRules": {
           "body": {
@@ -301,19 +486,17 @@
           }
         },
         "status": 200
-      }
+      },
+      "type": "Synchronous/HTTP"
     }
   ],
   "metadata": {
-    "pact-js": {
-      "version": "16.2.0"
-    },
     "pactRust": {
       "ffi": "0.4.28",
       "models": "1.3.5"
     },
     "pactSpecification": {
-      "version": "3.0.0"
+      "version": "4.0"
     }
   },
   "provider": {

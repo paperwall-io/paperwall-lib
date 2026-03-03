@@ -1,8 +1,8 @@
 import { describe, test, expect } from "bun:test";
-import { PactV3, MatchersV3 } from "@pact-foundation/pact";
+import { PactV4, MatchersV3 } from "@pact-foundation/pact";
 import path from "path";
 
-const { like, integer } = MatchersV3;
+const { like, integer, fromProviderState } = MatchersV3;
 
 // Mock window for apiFetch (uses window.location.origin in request headers)
 (globalThis as any).window = { location: { origin: "http://localhost" } };
@@ -13,7 +13,7 @@ import { api } from "../../src/api";
 // properly authenticated siteSession during verification.
 const siteSession = "valid-site-session-token";
 
-const pact = new PactV3({
+const pact = new PactV4({
   consumer: "paperwall-lib",
   provider: "paperwall-api",
   dir: path.resolve(__dirname, "pacts"),
@@ -29,18 +29,16 @@ const commonRequestHeaders = {
 describe("Embed Consumer Contract Tests", () => {
   test("creates a new article session", async () => {
     await pact
+      .addInteraction()
       .given("an article exists")
       .uponReceiving("a request to create a new article session")
-      .withRequest({
-        method: "POST",
-        path: "/articles/pact-article-id/session",
-        headers: commonRequestHeaders,
-        body: { sessionId: null },
+      .withRequest("POST", fromProviderState("/articles/${articleId}/session", "/articles/pact-article-id/session"), (builder) => {
+        builder.headers(commonRequestHeaders);
+        builder.jsonBody({ sessionId: null });
       })
-      .willRespondWith({
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: {
+      .willRespondWith(200, (builder) => {
+        builder.headers({ "Content-Type": "application/json" });
+        builder.jsonBody({
           articleSession: like({
             id: "session-id",
             article_id: "article-id",
@@ -51,7 +49,7 @@ describe("Embed Consumer Contract Tests", () => {
             }),
           }),
           balance: like(0),
-        },
+        });
       })
       .executeTest(async (mockServer) => {
         const embedApi = api({ apiBaseUrl: mockServer.url, siteSession });
@@ -64,25 +62,23 @@ describe("Embed Consumer Contract Tests", () => {
 
   test("retrieves an existing purchased session", async () => {
     await pact
+      .addInteraction()
       .given("an article exists with a purchased session")
       .uponReceiving("a request to retrieve an existing purchased session")
-      .withRequest({
-        method: "POST",
-        path: "/articles/pact-article-id/session",
-        headers: commonRequestHeaders,
-        body: { sessionId: "pact-session-id" },
+      .withRequest("POST", fromProviderState("/articles/${articleId}/session", "/articles/pact-article-id/session"), (builder) => {
+        builder.headers(commonRequestHeaders);
+        builder.jsonBody({ sessionId: fromProviderState("${sessionId}", "pact-session-id") });
       })
-      .willRespondWith({
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: {
+      .willRespondWith(200, (builder) => {
+        builder.headers({ "Content-Type": "application/json" });
+        builder.jsonBody({
           articleSession: like({
             id: "session-id",
             article_id: "article-id",
             data: like({ has_purchased: true }),
           }),
           balance: like(0),
-        },
+        });
       })
       .executeTest(async (mockServer) => {
         const embedApi = api({ apiBaseUrl: mockServer.url, siteSession });
@@ -93,18 +89,16 @@ describe("Embed Consumer Contract Tests", () => {
 
   test("rates a purchased article", async () => {
     await pact
+      .addInteraction()
       .given("an article exists with a purchased session")
       .uponReceiving("a request to rate a purchased article")
-      .withRequest({
-        method: "POST",
-        path: "/articles/pact-article-id/session/pact-session-id/rate",
-        headers: commonRequestHeaders,
-        body: { rating: 4 },
+      .withRequest("POST", fromProviderState("/articles/${articleId}/session/${sessionId}/rate", "/articles/pact-article-id/session/pact-session-id/rate"), (builder) => {
+        builder.headers(commonRequestHeaders);
+        builder.jsonBody({ rating: 4 });
       })
-      .willRespondWith({
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: {
+      .willRespondWith(200, (builder) => {
+        builder.headers({ "Content-Type": "application/json" });
+        builder.jsonBody({
           article: like({ id: "article-id", title: "Article Title" }),
           articleSession: like({ id: "session-id" }),
           report: {
@@ -113,7 +107,7 @@ describe("Embed Consumer Contract Tests", () => {
             numRatings: integer(1),
             score: like(4.0),
           },
-        },
+        });
       })
       .executeTest(async (mockServer) => {
         const embedApi = api({ apiBaseUrl: mockServer.url, siteSession });
@@ -126,20 +120,18 @@ describe("Embed Consumer Contract Tests", () => {
 
   test("returns 404 for a non-existent article", async () => {
     await pact
+      .addInteraction()
       .given("no article exists")
       .uponReceiving("a request for a non-existent article returns 404")
-      .withRequest({
-        method: "POST",
-        path: "/articles/non-existent-id/session",
-        headers: commonRequestHeaders,
-        body: { sessionId: null },
+      .withRequest("POST", fromProviderState("/articles/${articleId}/session", "/articles/non-existent-id/session"), (builder) => {
+        builder.headers(commonRequestHeaders);
+        builder.jsonBody({ sessionId: null });
       })
-      .willRespondWith({
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-        body: {
+      .willRespondWith(404, (builder) => {
+        builder.headers({ "Content-Type": "application/json" });
+        builder.jsonBody({
           errors: [{ message: "Article not found" }],
-        },
+        });
       })
       .executeTest(async (mockServer) => {
         const embedApi = api({ apiBaseUrl: mockServer.url, siteSession });
@@ -152,20 +144,18 @@ describe("Embed Consumer Contract Tests", () => {
 
   test("returns 400 when rating an unpurchased article", async () => {
     await pact
+      .addInteraction()
       .given("an article exists with an unpurchased session")
       .uponReceiving("a request to rate an unpurchased article returns 400")
-      .withRequest({
-        method: "POST",
-        path: "/articles/pact-article-id/session/unpurchased-session-id/rate",
-        headers: commonRequestHeaders,
-        body: { rating: 4 },
+      .withRequest("POST", fromProviderState("/articles/${articleId}/session/${sessionId}/rate", "/articles/pact-article-id/session/unpurchased-session-id/rate"), (builder) => {
+        builder.headers(commonRequestHeaders);
+        builder.jsonBody({ rating: 4 });
       })
-      .willRespondWith({
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-        body: {
+      .willRespondWith(400, (builder) => {
+        builder.headers({ "Content-Type": "application/json" });
+        builder.jsonBody({
           errors: [{ message: "Article not yet purchased" }],
-        },
+        });
       })
       .executeTest(async (mockServer) => {
         const embedApi = api({ apiBaseUrl: mockServer.url, siteSession });
