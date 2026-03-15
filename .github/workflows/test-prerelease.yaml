@@ -11,12 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checkout harness
-        uses: actions/checkout@v4
-        with:
-          repository: paperwall-io/paperwall-harness
-          path: harness
-          token: ${{ secrets.CROSS_REPO_TOKEN }}
+      - name: Install harness
+        run: curl -fsSL https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -26,7 +24,7 @@ jobs:
           password: ${{ secrets.CROSS_REPO_TOKEN }}
 
       - name: Start API and database
-        working-directory: harness
+        working-directory: .harness
         env:
           API_IMAGE: ghcr.io/paperwall-io/paperwall-api:${{ github.event.client_payload.image_tag }}
         run: docker compose up -d --wait
@@ -49,7 +47,7 @@ jobs:
 
       - name: Stop services
         if: always()
-        working-directory: harness
+        working-directory: .harness
         run: docker compose down
 
   report:
@@ -58,12 +56,10 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout harness scripts
-        uses: actions/checkout@v4
-        with:
-          repository: paperwall-io/paperwall-harness
-          sparse-checkout: scripts
-          token: ${{ secrets.CROSS_REPO_TOKEN }}
+      - name: Install harness
+        run: curl -fsSL https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
 
       - name: Report status to API repo
         env:
@@ -77,7 +73,7 @@ jobs:
           else
             STATE="failure"
           fi
-          bash scripts/report-status.sh \
+          bash .harness/scripts/report-status.sh \
             "paperwall-io/paperwall-api" \
             "$SHA" \
             "lib/prerelease-test" \
