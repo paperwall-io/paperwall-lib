@@ -1,0 +1,85 @@
+name: Test Pre-release API
+
+on:
+  repository_dispatch:
+    types: [api_prerelease]
+
+jobs:
+  test:
+    name: Run Tests Against Pre-release API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout harness
+        uses: actions/checkout@v4
+        with:
+          repository: paperwall-io/paperwall-harness
+          path: harness
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CROSS_REPO_TOKEN }}
+
+      - name: Start API and database
+        working-directory: harness
+        env:
+          API_IMAGE: ghcr.io/paperwall-io/paperwall-api:${{ github.event.client_payload.image_tag }}
+        run: docker compose up -d --wait
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run tests
+        run: bun run test
+        env:
+          API_BASE_URL: http://localhost:3003
+
+      - name: Stop services
+        if: always()
+        working-directory: harness
+        run: docker compose down
+
+  report:
+    name: Report Test Result
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout harness scripts
+        uses: actions/checkout@v4
+        with:
+          repository: paperwall-io/paperwall-harness
+          sparse-checkout: scripts
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
+
+      - name: Report status to API repo
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+          TEST_RESULT: ${{ needs.test.result }}
+          SHA: ${{ github.event.client_payload.sha }}
+          IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
+        run: |
+          if [ "$TEST_RESULT" = "success" ]; then
+            STATE="success"
+          else
+            STATE="failure"
+          fi
+          bash scripts/report-status.sh \
+            "paperwall-io/paperwall-api" \
+            "$SHA" \
+            "lib/prerelease-test" \
+            "$STATE" \
+            "Paperwall-lib tests $STATE against $IMAGE_TAG"

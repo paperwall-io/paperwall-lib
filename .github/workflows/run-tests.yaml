@@ -1,58 +1,55 @@
-# See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
+name: Run Tests
 
-name: Run tests
 on:
   push:
-    branch: [main]
+    branches:
+      - main
+
+env:
+  API_IMAGE: ghcr.io/paperwall-io/paperwall-api:latest
 
 jobs:
-  verify-contracts:
-    name: Verify against api - ${{ github.ref_name }}
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+
+      - name: Checkout harness
+        uses: actions/checkout@v4
         with:
-          bun-version: 1.1.45
-      - run: bun install
-      - run: bun run test:contract
+          repository: paperwall-io/paperwall-harness
+          path: harness
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
 
-      - name: Publish pacts to broker
-        if: ${{ vars.PACT_BROKER_URL != '' }}
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}/tests/contract/pacts:/pacts \
-            pactfoundation/pact-cli:latest \
-            publish /pacts \
-            --consumer-app-version ${{ github.sha }} \
-            --branch ${{ github.ref_name }} \
-            --broker-base-url ${{ vars.PACT_BROKER_URL }} \
-            --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
-            --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CROSS_REPO_TOKEN }}
 
-      - name: Can I deploy?
-        if: ${{ vars.PACT_BROKER_URL != '' }}
-        run: |
-          docker run --rm pactfoundation/pact-cli:latest \
-            broker can-i-deploy \
-            --pacticipant paperwall-lib \
-            --version ${{ github.sha }} \
-            --retry-while-unknown 12 \
-            --retry-interval 30 \
-            --to-environment production \
-            --broker-base-url ${{ vars.PACT_BROKER_URL }} \
-            --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
-            --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
+      - name: Start API and database
+        working-directory: harness
+        run: docker compose up -d --wait
 
-      - name: Record deployment
-        if: ${{ vars.PACT_BROKER_URL != '' }}
-        run: |
-          docker run --rm pactfoundation/pact-cli:latest \
-            broker record-deployment \
-            --pacticipant paperwall-lib \
-            --version ${{ github.sha }} \
-            --environment production \
-            --broker-base-url ${{ vars.PACT_BROKER_URL }} \
-            --broker-username ${{ vars.PACT_BROKER_USERNAME }} \
-            --broker-password ${{ secrets.PACT_BROKER_PASSWORD }}
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run tests
+        run: bun run test
+        env:
+          API_BASE_URL: http://localhost:3003
+
+      - name: Stop services
+        if: always()
+        working-directory: harness
+        run: docker compose down
