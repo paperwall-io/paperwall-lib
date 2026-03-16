@@ -20,9 +20,8 @@ jobs:
         working-directory: .harness
         env:
           API_IMAGE: ghcr.io/paperwall-io/paperwall-api:${{ github.event.client_payload.image_tag }}
-          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
         run: |
-          echo "$GITHUB_TOKEN" | docker login ghcr.io -u x --password-stdin
+          echo "${{ secrets.CROSS_REPO_TOKEN }}" | docker login ghcr.io -u x --password-stdin
           docker compose up -d --wait
 
       - name: Setup Bun
@@ -59,7 +58,6 @@ jobs:
 
       - name: Report status to API repo
         env:
-          GH_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
           TEST_RESULT: ${{ needs.test.result }}
           SHA: ${{ github.event.client_payload.sha }}
           IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
