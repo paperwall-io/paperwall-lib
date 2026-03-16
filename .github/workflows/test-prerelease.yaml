@@ -8,6 +8,9 @@ jobs:
   test:
     name: Run Tests Against Pre-release API
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
 
@@ -25,7 +28,7 @@ jobs:
         env:
           API_IMAGE: ghcr.io/paperwall-io/paperwall-api:${{ github.event.client_payload.image_tag }}
         run: |
-          echo "${{ secrets.CROSS_REPO_TOKEN }}" | docker login ghcr.io -u x --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u x --password-stdin
           docker compose up -d --wait
 
       - name: Setup Bun
