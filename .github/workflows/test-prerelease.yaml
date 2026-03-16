@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install harness
-        run: curl -fsSL https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
+        run: curl -fsSL -H "Authorization: token $GITHUB_TOKEN" https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
         env:
           GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
 
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install harness
-        run: curl -fsSL https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
+        run: curl -fsSL -H "Authorization: token $GITHUB_TOKEN" https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
         env:
           GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
 
