@@ -11,12 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checkout harness
-        uses: actions/checkout@v4
-        with:
-          repository: paperwall-io/paperwall-harness
-          path: .harness
-          token: ${{ secrets.CROSS_REPO_TOKEN }}
+      - name: Download harness
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+        run: |
+          mkdir -p .harness
+          gh api repos/paperwall-io/paperwall-harness/tarball/main > harness.tar.gz
+          tar xz -C .harness --strip-components=1 < harness.tar.gz
+          rm harness.tar.gz
 
       - name: Start API and database
         working-directory: .harness
@@ -53,12 +55,14 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout harness
-        uses: actions/checkout@v4
-        with:
-          repository: paperwall-io/paperwall-harness
-          path: .harness
-          token: ${{ secrets.CROSS_REPO_TOKEN }}
+      - name: Download harness
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+        run: |
+          mkdir -p .harness
+          gh api repos/paperwall-io/paperwall-harness/tarball/main > harness.tar.gz
+          tar xz -C .harness --strip-components=1 < harness.tar.gz
+          rm harness.tar.gz
 
       - name: Report status to API repo
         env:
