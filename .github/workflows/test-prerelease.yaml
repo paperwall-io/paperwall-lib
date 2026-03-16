@@ -11,11 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install harness
-        run: |
-          curl -fsSL -H "Authorization: token $GITHUB_TOKEN" https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+      - name: Checkout harness
+        uses: actions/checkout@v4
+        with:
+          repository: paperwall-io/paperwall-harness
+          path: .harness
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
 
       - name: Start API and database
         working-directory: .harness
@@ -52,11 +53,12 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Install harness
-        run: |
-          curl -fsSL -H "Authorization: token $GITHUB_TOKEN" https://raw.githubusercontent.com/paperwall-io/paperwall-harness/main/install.sh | bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+      - name: Checkout harness
+        uses: actions/checkout@v4
+        with:
+          repository: paperwall-io/paperwall-harness
+          path: .harness
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
 
       - name: Report status to API repo
         env:
