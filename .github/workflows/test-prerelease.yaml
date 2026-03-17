@@ -74,6 +74,7 @@ jobs:
 
       - name: Report status to API repo
         env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
           TEST_RESULT: ${{ needs.test.result }}
           SHA: ${{ github.event.client_payload.sha }}
           IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
