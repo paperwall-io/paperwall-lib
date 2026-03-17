@@ -28,7 +28,7 @@ jobs:
         env:
           API_IMAGE: ghcr.io/paperwall-io/paperwall-api:${{ github.event.client_payload.image_tag }}
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u x --password-stdin
+          echo "${{ secrets.CROSS_REPO_TOKEN }}" | docker login ghcr.io -u x --password-stdin
           docker compose up -d --wait
 
       - name: Setup Bun
