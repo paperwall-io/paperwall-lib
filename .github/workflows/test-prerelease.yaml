@@ -47,6 +47,11 @@ jobs:
         env:
           API_BASE_URL: http://localhost:3003
 
+      - name: Show service logs
+        if: failure()
+        working-directory: .harness
+        run: docker compose logs api
+
       - name: Stop services
         if: always()
         working-directory: .harness
