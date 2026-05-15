@@ -29,6 +29,8 @@ jobs:
 
       - name: Start API and database
         working-directory: .harness
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u x --password-stdin
           docker compose up -d --wait

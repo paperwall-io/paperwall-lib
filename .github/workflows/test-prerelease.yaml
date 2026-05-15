@@ -27,6 +27,7 @@ jobs:
         working-directory: .harness
         env:
           API_IMAGE: ghcr.io/paperwall-io/paperwall-api:${{ github.event.client_payload.image_tag }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: |
           echo "${{ secrets.CROSS_REPO_TOKEN }}" | docker login ghcr.io -u x --password-stdin
           docker compose up -d --wait
