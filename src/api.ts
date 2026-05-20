@@ -47,16 +47,17 @@ export const api = ({
       article: Article | null;
       report: ArticleReport | null;
       flags: ArticleFlags | null;
+      currency: string;
     }> => {
       try {
-        const { article, report, flags } = await apiClient(
+        const { article, report, flags, currency } = await apiClient(
           `/visit-article?url=${url}`,
           { method: "GET" }
         );
-        return { article, report, flags };
+        return { article, report, flags, currency: currency ?? "usd" };
       } catch (err) {
         console.log("visitArticle error", err);
-        return { article: null, report: null, flags: null };
+        return { article: null, report: null, flags: null, currency: "usd" };
       }
     },
 

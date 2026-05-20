@@ -93,6 +93,7 @@ export type WallStore = {
   siteSession?: string | null;
   balance?: number;
   flags?: ArticleFlags;
+  currency?: string;
   tmpData?: {
     articleSessionId?: string;
   };
