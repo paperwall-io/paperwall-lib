@@ -36,7 +36,7 @@ export const formatPrice = (
 ): string =>
   mode === "dollars"
     ? toDollars(tickets, currency)
-    : `${tickets} credit${tickets === 1 ? "" : "s"}`;
+    : `${tickets} ticket${tickets === 1 ? "" : "s"}`;
 
 export const formatBalance = (
   balance: number,
@@ -45,4 +45,4 @@ export const formatBalance = (
 ): string =>
   mode === "dollars"
     ? toDollars(balance, currency)
-    : `${balance} credit${balance === 1 ? "" : "s"}`;
+    : `${balance} ticket${balance === 1 ? "" : "s"}`;
