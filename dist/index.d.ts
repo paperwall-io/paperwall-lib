@@ -8,8 +8,6 @@ export interface WallConfig {
 	};
 	apiBaseUrl: string;
 	portalUrl: string;
-	siteName?: string;
-	siteLogo?: string;
 }
 export type WallState = "LOADING" | "INIT" | "QUICK_AUTH" | "INIT_SESSION" | "NO_WALL" | "SHOW_WALL" | "SHOW_ARTICLE";
 export type StoreCallback = (newState: any) => any;
@@ -59,16 +57,6 @@ export interface ArticleFlags {
 	isPromoMode: true;
 	previewMode: true;
 }
-export interface CurrencyConfig {
-	readonly code: string;
-	readonly symbol: string;
-	readonly locale: string;
-	readonly ticketPrice: number;
-}
-export interface PlatformSettings {
-	readonly pricingMode: "tickets" | "dollars" | "mixed";
-	readonly currencies: Readonly<Record<string, CurrencyConfig>>;
-}
 export type WallStore = {
 	article?: Article;
 	report?: ArticleReport;
@@ -76,14 +64,10 @@ export type WallStore = {
 	siteSession?: string | null;
 	balance?: number;
 	flags?: ArticleFlags;
-	currency?: string;
-	platform?: PlatformSettings;
 	tmpData?: {
 		articleSessionId?: string;
 	};
 };
-export type PricingMode = "tickets" | "dollars" | "mixed";
-export declare const formatPrice: (tickets: number, mode: PricingMode, currencyConfig?: CurrencyConfig) => string;
 export declare const initPaperwall: (_config: WallConfig) => {
 	config: WallConfig;
 	entities: {

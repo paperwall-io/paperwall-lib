@@ -118,11 +118,11 @@ var api = ({
     },
     visitArticle: async (url) => {
       try {
-        const { article, report, flags, currency, platform } = await apiClient(`/visit-article?url=${url}`, { method: "GET" });
-        return { article, report, flags, currency: currency ?? "usd", platform: platform ?? null };
+        const { article, report, flags } = await apiClient(`/visit-article?url=${url}`, { method: "GET" });
+        return { article, report, flags };
       } catch (err) {
         console.log("visitArticle error", err);
-        return { article: null, report: null, flags: null, currency: "usd", platform: null };
+        return { article: null, report: null, flags: null };
       }
     },
     verifySite: (domain, token) => apiClient(`/sites/verify`, {
@@ -172,9 +172,7 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
   entities.update({
     report: articleResp.report,
     article: articleResp.article,
-    flags: articleResp.flags,
-    currency: articleResp.currency,
-    platform: articleResp.platform ?? undefined
+    flags: articleResp.flags
   });
   const { article, report, flags } = entities.get();
   if (!article) {
@@ -303,30 +301,6 @@ var explainPastThreshold = (article) => {
     return "Reade by many already";
   }
   return "Random draw!";
-};
-
-// src/pricing.ts
-var USD_FALLBACK = {
-  code: "USD",
-  symbol: "$",
-  locale: "en-US",
-  ticketPrice: 0.25
-};
-var toDollars = (tickets, config) => {
-  const amount = tickets * config.ticketPrice;
-  return new Intl.NumberFormat(config.locale, {
-    style: "currency",
-    currency: config.code
-  }).format(amount);
-};
-var formatPrice = (tickets, mode, currencyConfig) => {
-  const config = currencyConfig ?? USD_FALLBACK;
-  const ticketLabel = `${tickets} ticket${tickets === 1 ? "" : "s"}`;
-  if (mode === "tickets")
-    return ticketLabel;
-  if (mode === "dollars")
-    return toDollars(tickets, config);
-  return `${ticketLabel} (${toDollars(tickets, config)})`;
 };
 
 // src/index.ts
@@ -482,6 +456,5 @@ var initPaperwall = (_config) => {
   };
 };
 export {
-  initPaperwall,
-  formatPrice
+  initPaperwall
 };
