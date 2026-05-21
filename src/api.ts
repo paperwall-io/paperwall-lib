@@ -3,6 +3,7 @@ import type {
   Article,
   ArticleFlags,
   ArticleReport,
+  PlatformSettings,
   SiteSession,
 } from "./types";
 import { apiFetch } from "./utils/apiFetch";
@@ -48,16 +49,17 @@ export const api = ({
       report: ArticleReport | null;
       flags: ArticleFlags | null;
       currency: string;
+      platform: PlatformSettings | null;
     }> => {
       try {
-        const { article, report, flags, currency } = await apiClient(
+        const { article, report, flags, currency, platform } = await apiClient(
           `/visit-article?url=${url}`,
           { method: "GET" }
         );
-        return { article, report, flags, currency: currency ?? "usd" };
+        return { article, report, flags, currency: currency ?? "usd", platform: platform ?? null };
       } catch (err) {
         console.log("visitArticle error", err);
-        return { article: null, report: null, flags: null, currency: "usd" };
+        return { article: null, report: null, flags: null, currency: "usd", platform: null };
       }
     },
 

@@ -6,6 +6,8 @@ export interface WallConfig {
   };
   apiBaseUrl: string;
   portalUrl: string;
+  siteName?: string;
+  siteLogo?: string;
 }
 
 export type WallState =
@@ -84,6 +86,18 @@ export interface ArticleFlags {
   previewMode: true;
 }
 
+export interface CurrencyConfig {
+  readonly code: string;
+  readonly symbol: string;
+  readonly locale: string;
+  readonly ticketPrice: number;
+}
+
+export interface PlatformSettings {
+  readonly pricingMode: "tickets" | "dollars" | "mixed";
+  readonly currencies: Readonly<Record<string, CurrencyConfig>>;
+}
+
 // used by current article
 export type WallStore = {
   // user: IUser
@@ -94,6 +108,7 @@ export type WallStore = {
   balance?: number;
   flags?: ArticleFlags;
   currency?: string;
+  platform?: PlatformSettings;
   tmpData?: {
     articleSessionId?: string;
   };

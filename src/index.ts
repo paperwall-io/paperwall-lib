@@ -207,6 +207,10 @@ export type {
   Pricing,
   ThresholdType,
   StoreCallback,
+  CurrencyConfig,
+  PlatformSettings,
 } from "./types";
 
 export { initPaperwall };
+export { formatPrice } from "./pricing";
+export type { PricingMode } from "./pricing";
