@@ -105,7 +105,7 @@ export declare const initPaperwall: (_config: WallConfig) => {
 	};
 	reset: () => void;
 	detectIsPost: () => boolean;
-	getReadingTime: () => number | null | undefined;
+	getReadingTime: () => number | null;
 	getCta: () => string | void;
 	resetOnNav: () => () => void;
 	isFree: () => boolean;

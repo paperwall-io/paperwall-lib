@@ -77,7 +77,7 @@ const initPaperwall = (_config: WallConfig) => {
 
   const getReadingTime = () => {
     const { article } = entities.get();
-    return article?.reading_time || (articleEl && calcReadingTime());
+    return (article?.reading_time || (articleEl && calcReadingTime())) ?? null;
   };
 
   const loadSiteSession = () => {
