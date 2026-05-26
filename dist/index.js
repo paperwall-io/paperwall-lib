@@ -330,12 +330,28 @@ var formatPrice = (tickets, mode, currencyConfig) => {
 };
 
 // src/index.ts
-var configDefaults = {
-  apiBaseUrl: "https://api.paperwall.io",
-  portalUrl: "https://paperwall.io"
+var modeUrls = {
+  live: {
+    portalUrl: "https://paperwall.io",
+    apiBaseUrl: "https://api.paperwall.io"
+  },
+  sandbox: {
+    portalUrl: "https://sandbox.paperwall.io",
+    apiBaseUrl: "https://sandbox-api.paperwall.io"
+  },
+  local: {
+    portalUrl: "http://portal.pw.local",
+    apiBaseUrl: "http://api.pw.local"
+  }
 };
 var initPaperwall = (_config) => {
-  let config = Object.assign(configDefaults, _config);
+  let urls;
+  if (_config.portalUrl && _config.apiBaseUrl) {
+    urls = { portalUrl: _config.portalUrl, apiBaseUrl: _config.apiBaseUrl };
+  } else {
+    urls = modeUrls[_config.mode || "live"];
+  }
+  const config = { ..._config, ...urls };
   const wallState = store_default("LOADING");
   const entities = store_default({});
   let articleEl = null;

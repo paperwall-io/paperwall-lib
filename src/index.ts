@@ -6,14 +6,33 @@ import { api } from "./api";
 import { urlListener } from "./utils/urlListener";
 import { explainPastThreshold, explainWhyFree } from "./utils/explainThreshold";
 
-const configDefaults = {
-  apiBaseUrl: "https://api.paperwall.io",
-  portalUrl: "https://paperwall.io",
+const modeUrls: Record<
+  WallConfig["mode"],
+  { apiBaseUrl: string; portalUrl: string }
+> = {
+  live: {
+    portalUrl: "https://paperwall.io",
+    apiBaseUrl: "https://api.paperwall.io",
+  },
+  sandbox: {
+    portalUrl: "https://sandbox.paperwall.io",
+    apiBaseUrl: "https://sandbox-api.paperwall.io",
+  },
+  local: {
+    portalUrl: "http://portal.pw.local",
+    apiBaseUrl: "http://api.pw.local",
+  },
 };
 
 const initPaperwall = (_config: WallConfig) => {
-  let config: WallConfig = Object.assign(configDefaults, _config);
+  let urls;
+  if (_config.portalUrl && _config.apiBaseUrl) {
+    urls = { portalUrl: _config.portalUrl, apiBaseUrl: _config.apiBaseUrl };
+  } else {
+    urls = modeUrls[_config.mode || "live"];
+  }
 
+  const config: WallConfig = { ..._config, ...urls };
   const wallState = store<WallState>("LOADING");
   const entities = store<WallStore>({});
   let articleEl: HTMLElement | null = null;
@@ -23,7 +42,7 @@ const initPaperwall = (_config: WallConfig) => {
       return console.warn("articleFinder not configured");
     }
     articleEl = document.getElementById(
-      selector || config.articleFinder?.selector
+      selector || config.articleFinder?.selector,
     );
   };
   const resetArticleEl = () => {
@@ -39,7 +58,7 @@ const initPaperwall = (_config: WallConfig) => {
       !!articleEl &&
       !!config.articleFinder.postUrls?.length &&
       !!config.articleFinder.postUrls.find((re: string) =>
-        new RegExp(re).exec(window.location.pathname)
+        new RegExp(re).exec(window.location.pathname),
       )
     );
   };
@@ -165,7 +184,7 @@ const initPaperwall = (_config: WallConfig) => {
         siteSession: entities.get().siteSession ?? null,
       };
       const { articleSession, report, article } = await api(
-        apiOpts
+        apiOpts,
       ).rateArticle(...opts);
 
       entities.update({

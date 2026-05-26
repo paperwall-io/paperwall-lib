@@ -50,7 +50,7 @@ export const initApp = (
 
         entities.update({
           siteSession: resp.siteSession,
-          // leaky -> need to pass the articleSessionId to preserve guest
+          // leaky -> need to pass the articleSessionId to preserve
           // sessions when coming back from redeem
           tmpData: resp.articleSessionId
             ? { articleSessionId: resp.articleSessionId }

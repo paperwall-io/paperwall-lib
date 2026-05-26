@@ -1,13 +1,18 @@
 export interface WallConfig {
+  mode: "live" | "sandbox" | "local";
   siteToken: string;
   articleFinder?: {
     selector: string;
     postUrls: string[];
   };
-  apiBaseUrl: string;
-  portalUrl: string;
+  theme: {
+    siteName?: string;
+    siteLogo?: string;
+  };
   siteName?: string;
   siteLogo?: string;
+  portalUrl: string;
+  apiBaseUrl: string;
 }
 
 export type WallState =
