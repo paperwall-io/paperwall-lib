@@ -15,7 +15,7 @@ export const initApp = (
   entities: Store<WallStore>
 ) => {
   const wallStatus = wallState.get();
-  if (wallStatus !== "LOADING") {
+  if (wallStatus !== "@pw/loading") {
     return console.warn(`App in invalid initialization state: ${wallStatus}`);
   }
 
@@ -42,7 +42,7 @@ export const initApp = (
   }
   const quickAuth = qParams.get("quick-auth");
   if (quickAuth) {
-    wallState.set("QUICK_AUTH");
+    wallState.set("@pw/authenticating");
     api(apiOpts)
       .getOrCreateSiteSession(quickAuth)
       .then((resp) => {
@@ -60,9 +60,9 @@ export const initApp = (
         const thisUrl = new URL(window.location.href);
         thisUrl.searchParams.delete("quick-auth");
         window.history.replaceState({}, document.title, thisUrl.toString());
-        wallState.set("LOADING");
+        wallState.set("@pw/loading");
       });
   } else {
-    wallState.set("INIT");
+    wallState.set("@pw/app_pending");
   }
 };

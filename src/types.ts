@@ -16,13 +16,13 @@ export interface WallConfig {
 }
 
 export type WallState =
-  | "LOADING"
-  | "INIT"
-  | "QUICK_AUTH"
-  | "INIT_SESSION"
-  | "NO_WALL"
-  | "SHOW_WALL"
-  | "SHOW_ARTICLE";
+  | "@pw/loading"
+  | "@pw/app_pending"
+  | "@pw/authenticating"
+  | "@pw/session_pending"
+  | "@pw/no_wall"
+  | "@pw/show_wall"
+  | "@pw/show_article";
 
 export type StoreCallback = (newState: any) => any;
 export type Store<T> = {

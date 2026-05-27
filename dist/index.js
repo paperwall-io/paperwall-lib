@@ -158,13 +158,13 @@ var api = ({
 var initArticleSession = async (apiOpts, entities, wallState) => {
   const wallStatus = wallState.get();
   let { tmpData, siteSession } = entities.get();
-  if (wallStatus !== "INIT") {
+  if (wallStatus !== "@pw/ready") {
     return console.warn("loadArticleSession: Not loading", {
       wallStatus,
       siteSession
     });
   }
-  wallState.set("INIT_SESSION");
+  wallState.set("@pw/fetching-session");
   const thisOrigin = window.location.origin;
   const thisUrl = thisOrigin + window.location.pathname;
   const articleResp = await api(apiOpts).visitArticle(thisUrl);
@@ -213,7 +213,7 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
 // src/operations/initApp.ts
 var initApp = (apiOpts, config, wallState, entities) => {
   const wallStatus = wallState.get();
-  if (wallStatus !== "LOADING") {
+  if (wallStatus !== "@pw/loading") {
     return console.warn(`App in invalid initialization state: ${wallStatus}`);
   }
   const qParams = new URLSearchParams(window.location.search);
@@ -236,7 +236,7 @@ var initApp = (apiOpts, config, wallState, entities) => {
   }
   const quickAuth = qParams.get("quick-auth");
   if (quickAuth) {
-    wallState.set("QUICK_AUTH");
+    wallState.set("@pw/authenticating");
     api(apiOpts).getOrCreateSiteSession(quickAuth).then((resp) => {
       console.log("quickAuth resp", resp);
       entities.update({
@@ -247,10 +247,10 @@ var initApp = (apiOpts, config, wallState, entities) => {
       const thisUrl = new URL(window.location.href);
       thisUrl.searchParams.delete("quick-auth");
       window.history.replaceState({}, document.title, thisUrl.toString());
-      wallState.set("LOADING");
+      wallState.set("@pw/loading");
     });
   } else {
-    wallState.set("INIT");
+    wallState.set("@pw/ready");
   }
 };
 
@@ -352,7 +352,7 @@ var initPaperwall = (_config) => {
     urls = modeUrls[_config.mode || "live"];
   }
   const config = { ..._config, ...urls };
-  const wallState = store_default("LOADING");
+  const wallState = store_default("@pw/loading");
   const entities = store_default({});
   let articleEl = null;
   const setArticleEl = (selector) => {
@@ -374,15 +374,15 @@ var initPaperwall = (_config) => {
   const checkWallState = () => {
     if (config.articleFinder?.selector && !articleEl) {
       console.warn("checkWallState: Post DOM element not found");
-      return "NO_WALL";
+      return "@pw/no_wall";
     }
     const { article, flags, articleSession } = entities.get();
     if (article && flags) {
       if (!flags.previewMode || flags.previewMode && articleSession?.data.is_site_member) {
-        return articleSession?.data.has_purchased ? "SHOW_ARTICLE" : "SHOW_WALL";
+        return articleSession?.data.has_purchased ? "@pw/show_article" : "@pw/show_wall";
       }
     }
-    return "NO_WALL";
+    return "@pw/no_wall";
   };
   const calcReadingTime = () => {
     if (!articleEl) {
@@ -416,7 +416,7 @@ var initPaperwall = (_config) => {
     },
     reset: () => {
       resetArticleEl();
-      wallState.set("LOADING");
+      wallState.set("@pw/loading");
     },
     detectIsPost,
     getReadingTime,
@@ -443,7 +443,7 @@ var initPaperwall = (_config) => {
       setTimeout(() => {
         console.log("resetOnNav triggered");
         resetArticleEl();
-        wallState.set("LOADING");
+        wallState.set("@pw/loading");
       }, 10);
     }),
     isFree: () => {

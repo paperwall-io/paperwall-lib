@@ -33,7 +33,7 @@ const initPaperwall = (_config: WallConfig) => {
   }
 
   const config: WallConfig = { ..._config, ...urls };
-  const wallState = store<WallState>("LOADING");
+  const wallState = store<WallState>("@pw/loading");
   const entities = store<WallStore>({});
   let articleEl: HTMLElement | null = null;
 
@@ -66,7 +66,7 @@ const initPaperwall = (_config: WallConfig) => {
   const checkWallState = (): WallState => {
     if (config.articleFinder?.selector && !articleEl) {
       console.warn("checkWallState: Post DOM element not found");
-      return "NO_WALL";
+      return "@pw/no_wall";
     }
 
     const { article, flags, articleSession } = entities.get();
@@ -77,11 +77,11 @@ const initPaperwall = (_config: WallConfig) => {
         (flags.previewMode && articleSession?.data.is_site_member)
       ) {
         return articleSession?.data.has_purchased
-          ? "SHOW_ARTICLE"
-          : "SHOW_WALL";
+          ? "@pw/show_article"
+          : "@pw/show_wall";
       }
     }
-    return "NO_WALL";
+    return "@pw/no_wall";
   };
 
   const calcReadingTime = () => {
@@ -119,7 +119,7 @@ const initPaperwall = (_config: WallConfig) => {
     },
     reset: () => {
       resetArticleEl();
-      wallState.set("LOADING");
+      wallState.set("@pw/loading");
     },
     detectIsPost,
     getReadingTime,
@@ -155,7 +155,7 @@ const initPaperwall = (_config: WallConfig) => {
         setTimeout(() => {
           console.log("resetOnNav triggered");
           resetArticleEl();
-          wallState.set("LOADING");
+          wallState.set("@pw/loading");
         }, 10);
       }),
     isFree: () => {

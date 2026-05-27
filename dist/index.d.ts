@@ -16,7 +16,7 @@ export interface WallConfig {
 	portalUrl: string;
 	apiBaseUrl: string;
 }
-export type WallState = "LOADING" | "INIT" | "QUICK_AUTH" | "INIT_SESSION" | "NO_WALL" | "SHOW_WALL" | "SHOW_ARTICLE";
+export type WallState = "@pw/loading" | "@pw/ready" | "@pw/authenticating" | "@pw/fetching-session" | "@pw/no_wall" | "@pw/show_wall" | "@pw/show_article";
 export type StoreCallback = (newState: any) => any;
 export type Pricing = {
 	num_tickets: number;
