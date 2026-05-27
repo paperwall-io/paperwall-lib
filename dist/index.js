@@ -158,13 +158,13 @@ var api = ({
 var initArticleSession = async (apiOpts, entities, wallState) => {
   const wallStatus = wallState.get();
   let { tmpData, siteSession } = entities.get();
-  if (wallStatus !== "@pw/ready") {
+  if (wallStatus !== "@pw/app_pending") {
     return console.warn("loadArticleSession: Not loading", {
       wallStatus,
       siteSession
     });
   }
-  wallState.set("@pw/fetching-session");
+  wallState.set("@pw/session_pending");
   const thisOrigin = window.location.origin;
   const thisUrl = thisOrigin + window.location.pathname;
   const articleResp = await api(apiOpts).visitArticle(thisUrl);
@@ -250,7 +250,7 @@ var initApp = (apiOpts, config, wallState, entities) => {
       wallState.set("@pw/loading");
     });
   } else {
-    wallState.set("@pw/ready");
+    wallState.set("@pw/app_pending");
   }
 };
 
