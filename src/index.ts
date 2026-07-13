@@ -41,9 +41,12 @@ const initPaperwall = (_config: WallConfig) => {
     if (!config.articleFinder) {
       return console.warn("articleFinder not configured");
     }
-    articleEl = document.getElementById(
-      selector || config.articleFinder?.selector,
-    );
+    const target = selector || config.articleFinder?.selector;
+    if (target?.startsWith(".")) {
+      articleEl = document.getElementsByClassName(target.slice(1))[0] as HTMLElement | null;
+    } else {
+      articleEl = document.getElementById(target);
+    }
   };
   const resetArticleEl = () => {
     articleEl = null;
