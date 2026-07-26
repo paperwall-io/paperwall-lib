@@ -19,8 +19,8 @@ const modeUrls: Record<
     apiBaseUrl: "https://sandbox-api.paperwall.io",
   },
   local: {
-    portalUrl: "http://portal.pw.local",
-    apiBaseUrl: "http://api.pw.local",
+    portalUrl: "http://portal.pw.local:5173",
+    apiBaseUrl: "http://api.pw.local:3003",
   },
 };
 
@@ -33,7 +33,7 @@ const initPaperwall = (_config: WallConfig) => {
   }
 
   const config: WallConfig = { ..._config, ...urls };
-  const wallState = store<WallState>("@pw/loading");
+  const wallState = store<WallState>("@paperwall/loading");
   const entities = store<WallStore>({});
   let articleEl: HTMLElement | null = null;
 
@@ -43,7 +43,9 @@ const initPaperwall = (_config: WallConfig) => {
     }
     const target = selector || config.articleFinder?.selector;
     if (target?.startsWith(".")) {
-      articleEl = document.getElementsByClassName(target.slice(1))[0] as HTMLElement | null;
+      articleEl = document.getElementsByClassName(
+        target.slice(1),
+      )[0] as HTMLElement | null;
     } else {
       articleEl = document.getElementById(target);
     }
@@ -69,7 +71,7 @@ const initPaperwall = (_config: WallConfig) => {
   const checkWallState = (): WallState => {
     if (config.articleFinder?.selector && !articleEl) {
       console.warn("checkWallState: Post DOM element not found");
-      return "@pw/no_wall";
+      return "@paperwall/no_wall";
     }
 
     const { article, flags, articleSession } = entities.get();
@@ -80,11 +82,11 @@ const initPaperwall = (_config: WallConfig) => {
         (flags.previewMode && articleSession?.data.is_site_member)
       ) {
         return articleSession?.data.has_purchased
-          ? "@pw/show_article"
-          : "@pw/show_wall";
+          ? "@paperwall/show_article"
+          : "@paperwall/show_wall";
       }
     }
-    return "@pw/no_wall";
+    return "@paperwall/no_wall";
   };
 
   const calcReadingTime = () => {
@@ -122,7 +124,7 @@ const initPaperwall = (_config: WallConfig) => {
     },
     reset: () => {
       resetArticleEl();
-      wallState.set("@pw/loading");
+      wallState.set("@paperwall/loading");
     },
     detectIsPost,
     getReadingTime,
@@ -158,7 +160,7 @@ const initPaperwall = (_config: WallConfig) => {
         setTimeout(() => {
           console.log("resetOnNav triggered");
           resetArticleEl();
-          wallState.set("@pw/loading");
+          wallState.set("@paperwall/loading");
         }, 10);
       }),
     isFree: () => {

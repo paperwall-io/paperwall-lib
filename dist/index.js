@@ -158,13 +158,13 @@ var api = ({
 var initArticleSession = async (apiOpts, entities, wallState) => {
   const wallStatus = wallState.get();
   let { tmpData, siteSession } = entities.get();
-  if (wallStatus !== "@pw/app_pending") {
+  if (wallStatus !== "@paperwall/app_pending") {
     return console.warn("loadArticleSession: Not loading", {
       wallStatus,
       siteSession
     });
   }
-  wallState.set("@pw/session_pending");
+  wallState.set("@paperwall/session_pending");
   const thisOrigin = window.location.origin;
   const thisUrl = thisOrigin + window.location.pathname;
   const articleResp = await api(apiOpts).visitArticle(thisUrl);
@@ -213,7 +213,7 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
 // src/operations/initApp.ts
 var initApp = (apiOpts, config, wallState, entities) => {
   const wallStatus = wallState.get();
-  if (wallStatus !== "@pw/loading") {
+  if (wallStatus !== "@paperwall/loading") {
     return console.warn(`App in invalid initialization state: ${wallStatus}`);
   }
   const qParams = new URLSearchParams(window.location.search);
@@ -236,7 +236,7 @@ var initApp = (apiOpts, config, wallState, entities) => {
   }
   const quickAuth = qParams.get("quick-auth");
   if (quickAuth) {
-    wallState.set("@pw/authenticating");
+    wallState.set("@paperwall/authenticating");
     api(apiOpts).getOrCreateSiteSession(quickAuth).then((resp) => {
       console.log("quickAuth resp", resp);
       entities.update({
@@ -247,10 +247,10 @@ var initApp = (apiOpts, config, wallState, entities) => {
       const thisUrl = new URL(window.location.href);
       thisUrl.searchParams.delete("quick-auth");
       window.history.replaceState({}, document.title, thisUrl.toString());
-      wallState.set("@pw/loading");
+      wallState.set("@paperwall/loading");
     });
   } else {
-    wallState.set("@pw/app_pending");
+    wallState.set("@paperwall/app_pending");
   }
 };
 
@@ -340,8 +340,8 @@ var modeUrls = {
     apiBaseUrl: "https://sandbox-api.paperwall.io"
   },
   local: {
-    portalUrl: "http://portal.pw.local",
-    apiBaseUrl: "http://api.pw.local"
+    portalUrl: "http://portal.pw.local:5173",
+    apiBaseUrl: "http://api.pw.local:3003"
   }
 };
 var initPaperwall = (_config) => {
@@ -352,7 +352,7 @@ var initPaperwall = (_config) => {
     urls = modeUrls[_config.mode || "live"];
   }
   const config = { ..._config, ...urls };
-  const wallState = store_default("@pw/loading");
+  const wallState = store_default("@paperwall/loading");
   const entities = store_default({});
   let articleEl = null;
   const setArticleEl = (selector) => {
@@ -379,15 +379,15 @@ var initPaperwall = (_config) => {
   const checkWallState = () => {
     if (config.articleFinder?.selector && !articleEl) {
       console.warn("checkWallState: Post DOM element not found");
-      return "@pw/no_wall";
+      return "@paperwall/no_wall";
     }
     const { article, flags, articleSession } = entities.get();
     if (article && flags) {
       if (!flags.previewMode || flags.previewMode && articleSession?.data.is_site_member) {
-        return articleSession?.data.has_purchased ? "@pw/show_article" : "@pw/show_wall";
+        return articleSession?.data.has_purchased ? "@paperwall/show_article" : "@paperwall/show_wall";
       }
     }
-    return "@pw/no_wall";
+    return "@paperwall/no_wall";
   };
   const calcReadingTime = () => {
     if (!articleEl) {
@@ -421,7 +421,7 @@ var initPaperwall = (_config) => {
     },
     reset: () => {
       resetArticleEl();
-      wallState.set("@pw/loading");
+      wallState.set("@paperwall/loading");
     },
     detectIsPost,
     getReadingTime,
@@ -448,7 +448,7 @@ var initPaperwall = (_config) => {
       setTimeout(() => {
         console.log("resetOnNav triggered");
         resetArticleEl();
-        wallState.set("@pw/loading");
+        wallState.set("@paperwall/loading");
       }, 10);
     }),
     isFree: () => {

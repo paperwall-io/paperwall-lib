@@ -5,7 +5,7 @@ export interface WallConfig {
     selector: string;
     postUrls: string[];
   };
-  theme: {
+  theme?: {
     siteName?: string;
     siteLogo?: string;
   };
@@ -16,13 +16,13 @@ export interface WallConfig {
 }
 
 export type WallState =
-  | "@pw/loading"
-  | "@pw/app_pending"
-  | "@pw/authenticating"
-  | "@pw/session_pending"
-  | "@pw/no_wall"
-  | "@pw/show_wall"
-  | "@pw/show_article";
+  | "@paperwall/loading"
+  | "@paperwall/app_pending"
+  | "@paperwall/authenticating"
+  | "@paperwall/session_pending"
+  | "@paperwall/no_wall"
+  | "@paperwall/show_wall"
+  | "@paperwall/show_article";
 
 export type StoreCallback = (newState: any) => any;
 export type Store<T> = {
@@ -59,6 +59,10 @@ export interface Article {
     posterUrl: string;
     label: string;
     description?: string;
+  };
+  site: {
+    title: string;
+    logo: string;
   };
 }
 

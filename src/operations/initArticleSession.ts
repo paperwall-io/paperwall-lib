@@ -18,7 +18,7 @@ export const initArticleSession = async (
   const wallStatus = wallState.get();
 
   let { tmpData, siteSession } = entities.get();
-  if (wallStatus !== "@pw/app_pending") {
+  if (wallStatus !== "@paperwall/app_pending") {
     return console.warn("loadArticleSession: Not loading", {
       wallStatus,
       siteSession,
@@ -26,7 +26,7 @@ export const initArticleSession = async (
   }
   // needs to move past INIT to not have an infinite loop, especially
   // when entities and wallState are the same store
-  wallState.set("@pw/session_pending");
+  wallState.set("@paperwall/session_pending");
 
   const thisOrigin = window.location.origin;
   const thisUrl = thisOrigin + window.location.pathname;
