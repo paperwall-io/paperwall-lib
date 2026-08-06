@@ -279,6 +279,12 @@ var urlListener = (onNav) => {
   };
 };
 
+// src/utils/isPostUrl.ts
+var isPostUrl = (path, finder) => {
+  const matchesAny = (patterns) => !!patterns?.length && patterns.some((re) => new RegExp(re).test(path));
+  return matchesAny(finder.postUrls) && !matchesAny(finder.excludeUrls);
+};
+
 // src/utils/explainThreshold.ts
 var explainWhyFree = (article) => {
   if (article.threshold_type === "DAYS") {
@@ -374,7 +380,7 @@ var initPaperwall = (_config) => {
       console.warn("articleFinder not configured");
       return false;
     }
-    return !!articleEl && !!config.articleFinder.postUrls?.length && !!config.articleFinder.postUrls.find((re) => new RegExp(re).exec(window.location.pathname));
+    return !!articleEl && isPostUrl(window.location.pathname, config.articleFinder);
   };
   const checkWallState = () => {
     if (config.articleFinder?.selector && !articleEl) {

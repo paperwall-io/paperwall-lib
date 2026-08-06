@@ -4,6 +4,7 @@ import localStore from "./utils/localStore";
 import ops from "./operations";
 import { api } from "./api";
 import { urlListener } from "./utils/urlListener";
+import { isPostUrl } from "./utils/isPostUrl";
 import { explainPastThreshold, explainWhyFree } from "./utils/explainThreshold";
 
 const modeUrls: Record<
@@ -32,7 +33,8 @@ const initPaperwall = (_config: WallConfig) => {
     urls = modeUrls[_config.mode || "live"];
   }
 
-  const config: WallConfig = { ..._config, ...urls };
+  const config = { ..._config, ...urls } as WallConfig &
+    Required<Pick<WallConfig, "portalUrl" | "apiBaseUrl">>;
   const wallState = store<WallState>("@paperwall/loading");
   const entities = store<WallStore>({});
   let articleEl: HTMLElement | null = null;
@@ -61,10 +63,7 @@ const initPaperwall = (_config: WallConfig) => {
     }
     return (
       !!articleEl &&
-      !!config.articleFinder.postUrls?.length &&
-      !!config.articleFinder.postUrls.find((re: string) =>
-        new RegExp(re).exec(window.location.pathname),
-      )
+      isPostUrl(window.location.pathname, config.articleFinder)
     );
   };
 

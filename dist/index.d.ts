@@ -5,7 +5,21 @@ export interface WallConfig {
 	siteToken: string;
 	articleFinder?: {
 		selector: string;
+		/** Paths that are articles. A page matching none of these is never walled. */
 		postUrls: string[];
+		/**
+		 * Paths that are never articles, applied after `postUrls` matches.
+		 *
+		 * Exists because some platforms give you no prefix to anchor on. Ghost
+		 * serves posts at the root as `/:slug/`, so the only include pattern that
+		 * catches every post also catches `/about/` and `/contact/` — and the
+		 * alternative, folding the exceptions into the include pattern as a
+		 * negative lookahead, produces something a publisher cannot safely edit
+		 * when they add a page.
+		 *
+		 * Optional, and omitting it excludes nothing.
+		 */
+		excludeUrls?: string[];
 	};
 	theme?: {
 		siteName?: string;
@@ -13,8 +27,8 @@ export interface WallConfig {
 	};
 	siteName?: string;
 	siteLogo?: string;
-	portalUrl: string;
-	apiBaseUrl: string;
+	portalUrl?: string;
+	apiBaseUrl?: string;
 }
 export type WallState = "@paperwall/loading" | "@paperwall/app_pending" | "@paperwall/authenticating" | "@paperwall/session_pending" | "@paperwall/no_wall" | "@paperwall/show_wall" | "@paperwall/show_article";
 export type StoreCallback = (newState: any) => any;
@@ -94,7 +108,7 @@ export type WallStore = {
 export type PricingMode = "tickets" | "dollars" | "mixed";
 export declare const formatPrice: (tickets: number, mode: PricingMode, currencyConfig?: CurrencyConfig) => string;
 export declare const initPaperwall: (_config: WallConfig) => {
-	config: WallConfig;
+	config: WallConfig & Required<Pick<WallConfig, "apiBaseUrl" | "portalUrl">>;
 	entities: {
 		get: () => WallStore;
 		update: (newState: WallStore) => WallStore;

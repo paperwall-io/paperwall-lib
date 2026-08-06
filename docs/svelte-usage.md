@@ -7,7 +7,12 @@ const config: WallConfig = {
   siteToken: 'your-site-token',
   articleFinder: {
     selector: 'blog-post',
-    postUrls: ['/posts/.*', '/articles/.*']
+    postUrls: ['/posts/.*', '/articles/.*'],
+    // Optional. Applied after postUrls matches, so it can only ever remove
+    // pages. Useful when your posts have no path prefix to anchor on — a
+    // platform that serves posts at the root needs a broad include and a list
+    // of the pages that are not posts.
+    excludeUrls: ['^/(about|contact|privacy)/?$']
   }
 };
 
