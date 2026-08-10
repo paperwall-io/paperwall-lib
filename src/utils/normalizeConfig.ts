@@ -30,7 +30,7 @@ const isMissing = (value: unknown): boolean =>
  * actually report.
  *
  * Empty arrays are treated as missing. `postUrls: []` matches nothing, so
- * honouring it literally reproduces the same silent failure it looks like a
+ * honouring it reproduces the same silent failure it looks like a
  * publisher was trying to avoid.
  */
 const mergeArticleFinder = (
