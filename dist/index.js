@@ -285,6 +285,37 @@ var isPostUrl = (path, finder) => {
   return matchesAny(finder.postUrls) && !matchesAny(finder.excludeUrls);
 };
 
+// src/utils/normalizeConfig.ts
+var FINDER_FIELDS = ["selector", "postUrls", "excludeUrls"];
+var isMissing = (value) => value === undefined || value === null || Array.isArray(value) && !value.length;
+var mergeArticleFinder = (provided, defaults) => {
+  if (!defaults)
+    return provided;
+  if (!provided)
+    return defaults;
+  const merged = { ...defaults };
+  const supplied = [];
+  const filled = [];
+  for (const field of FINDER_FIELDS) {
+    const value = provided[field];
+    if (isMissing(value)) {
+      if (!isMissing(defaults[field]))
+        filled.push(field);
+    } else {
+      merged[field] = value;
+      supplied.push(field);
+    }
+  }
+  if (supplied.length && filled.length) {
+    console.warn(`[paperwall] articleFinder is missing ${filled.join(", ")}; using the platform default. ` + `Supplied: ${supplied.join(", ")}.`);
+  }
+  return merged;
+};
+var normalizeWallConfig = (config, defaults = {}) => ({
+  ...config,
+  articleFinder: mergeArticleFinder(config.articleFinder, defaults.articleFinder)
+});
+
 // src/utils/explainThreshold.ts
 var explainWhyFree = (article) => {
   if (article.threshold_type === "DAYS") {
@@ -350,7 +381,8 @@ var modeUrls = {
     apiBaseUrl: "http://api.pw.local:3003"
   }
 };
-var initPaperwall = (_config) => {
+var initPaperwall = (_config, platformDefaults = {}) => {
+  _config = normalizeWallConfig(_config, platformDefaults);
   let urls;
   if (_config.portalUrl && _config.apiBaseUrl) {
     urls = { portalUrl: _config.portalUrl, apiBaseUrl: _config.apiBaseUrl };
@@ -509,6 +541,7 @@ var initPaperwall = (_config) => {
   };
 };
 export {
+  normalizeWallConfig,
   initPaperwall,
   formatPrice
 };

@@ -5,6 +5,10 @@ import ops from "./operations";
 import { api } from "./api";
 import { urlListener } from "./utils/urlListener";
 import { isPostUrl } from "./utils/isPostUrl";
+import {
+  normalizeWallConfig,
+  type PlatformDefaults,
+} from "./utils/normalizeConfig";
 import { explainPastThreshold, explainWhyFree } from "./utils/explainThreshold";
 
 const modeUrls: Record<
@@ -25,7 +29,12 @@ const modeUrls: Record<
   },
 };
 
-const initPaperwall = (_config: WallConfig) => {
+const initPaperwall = (
+  _config: WallConfig,
+  platformDefaults: PlatformDefaults = {},
+) => {
+  _config = normalizeWallConfig(_config, platformDefaults);
+
   let urls;
   if (_config.portalUrl && _config.apiBaseUrl) {
     urls = { portalUrl: _config.portalUrl, apiBaseUrl: _config.apiBaseUrl };
@@ -237,3 +246,6 @@ export type {
 export { initPaperwall };
 export { formatPrice } from "./pricing";
 export type { PricingMode } from "./pricing";
+
+export { normalizeWallConfig };
+export type { PlatformDefaults };

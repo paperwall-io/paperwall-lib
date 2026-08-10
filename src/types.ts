@@ -69,11 +69,6 @@ export interface Article {
   threshold_value: number;
   num_tickets: number;
   reading_time: number | null;
-  poster: {
-    posterUrl: string;
-    label: string;
-    description?: string;
-  };
   site: {
     title: string;
     logo: string;

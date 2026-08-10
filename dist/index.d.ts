@@ -48,11 +48,6 @@ export interface Article {
 	threshold_value: number;
 	num_tickets: number;
 	reading_time: number | null;
-	poster: {
-		posterUrl: string;
-		label: string;
-		description?: string;
-	};
 	site: {
 		title: string;
 		logo: string;
@@ -105,9 +100,25 @@ export type WallStore = {
 		articleSessionId?: string;
 	};
 };
+/**
+ * Defaults a platform-specific embed supplies for its own CMS.
+ *
+ * Only `articleFinder` for now — the rest of WallConfig is per-publisher by
+ * nature (siteToken, mode) and has nothing a platform could sensibly guess.
+ */
+export type PlatformDefaults = {
+	readonly articleFinder?: WallConfig["articleFinder"];
+};
+/**
+ * Applies a platform embed's defaults to the config a publisher wrote.
+ *
+ * Lives here rather than in each embed's entrypoint so that embed, embed-ghost
+ * and embed-nextjs cannot drift into three different merge semantics.
+ */
+export declare const normalizeWallConfig: (config: WallConfig, defaults?: PlatformDefaults) => WallConfig;
 export type PricingMode = "tickets" | "dollars" | "mixed";
 export declare const formatPrice: (tickets: number, mode: PricingMode, currencyConfig?: CurrencyConfig) => string;
-export declare const initPaperwall: (_config: WallConfig) => {
+export declare const initPaperwall: (_config: WallConfig, platformDefaults?: PlatformDefaults) => {
 	config: WallConfig & Required<Pick<WallConfig, "apiBaseUrl" | "portalUrl">>;
 	entities: {
 		get: () => WallStore;
