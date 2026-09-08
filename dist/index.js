@@ -469,13 +469,13 @@ var initPaperwall = (_config, platformDefaults = {}) => {
         return console.warn("getCta: article not found");
       }
       if (articleSession) {
-        return config.portalUrl + "/redeem?" + new URLSearchParams({
+        return config.portalUrl + "/unlock?" + new URLSearchParams({
           session_id: articleSession.id,
           article_id: article.id,
           redirect: window.location.toString()
         }).toString();
       } else {
-        return config.portalUrl + "/redeem?" + new URLSearchParams({
+        return config.portalUrl + "/unlock?" + new URLSearchParams({
           article_id: article.id,
           redirect: window.location.toString(),
           mode: "member"
