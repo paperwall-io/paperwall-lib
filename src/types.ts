@@ -37,9 +37,9 @@ export type WallState =
   | "@paperwall/no_wall"
   | "@paperwall/show_wall"
   | "@paperwall/show_article"
-  // A POST_READ_SUPPORT article: nothing is gated, and the embed asks for
-  // support after the content.
-  | "@paperwall/show_support";
+  // A POST_READ_CONTRIBUTION article: nothing is gated, and the embed asks for
+  // a contribution after the content.
+  | "@paperwall/show_contribution";
 
 export type StoreCallback = (newState: any) => any;
 export type Store<T> = {
@@ -62,11 +62,11 @@ export type Pricing = {
 export type ThresholdType = "NONE" | "RATING" | "VISITS" | "DAYS" | "READS";
 
 /**
- * PRE_READ_WALL is pay-per-read. POST_READ_SUPPORT leaves the article open and
- * asks for a voluntary payment after it. Absent from an API that predates it,
- * which means PRE_READ_WALL.
+ * PRE_READ_WALL is pay-per-read. POST_READ_CONTRIBUTION leaves the article
+ * open and asks for a voluntary payment after it. Absent from an API that
+ * predates it, which means PRE_READ_WALL.
  */
-export type AccessMode = "PRE_READ_WALL" | "POST_READ_SUPPORT";
+export type AccessMode = "PRE_READ_WALL" | "POST_READ_CONTRIBUTION";
 
 export interface Article {
   id: string;
@@ -94,7 +94,7 @@ export interface ArticleSession {
   data: {
     is_site_member: boolean;
     has_purchased: boolean;
-    /** The reader has paid post-read support for this article. */
+    /** The reader has paid a post-read contribution for this article. */
     contributed?: boolean;
     pricing: {
       pricing_id: string;
@@ -140,8 +140,8 @@ export type WallStore = {
   flags?: ArticleFlags;
   currency?: string;
   platform?: PlatformSettings;
-  /** Ticket amounts offered after a POST_READ_SUPPORT article. Site-wide. */
-  supportOptions?: readonly number[];
+  /** Ticket amounts offered after a POST_READ_CONTRIBUTION article. Site-wide. */
+  contributionOptions?: readonly number[];
   tmpData?: {
     articleSessionId?: string;
   };

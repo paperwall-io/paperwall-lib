@@ -89,8 +89,8 @@ const initPaperwall = (
         !flags.previewMode ||
         (flags.previewMode && articleSession?.data.is_site_member)
       ) {
-        if (article.access_mode === "POST_READ_SUPPORT") {
-          return "@paperwall/show_support";
+        if (article.access_mode === "POST_READ_CONTRIBUTION") {
+          return "@paperwall/show_contribution";
         }
         return articleSession?.data.has_purchased
           ? "@paperwall/show_article"
@@ -167,7 +167,7 @@ const initPaperwall = (
       }
     },
     /**
-     * Portal link that pays `numTickets` of post-read support. Without a
+     * Portal link that pays `numTickets` of post-read contribution. Without a
      * session the reader signs in on the portal first, as with getCta.
      */
     getContributeCta: (numTickets: number) => {
@@ -186,8 +186,8 @@ const initPaperwall = (
       return config.portalUrl + "/contribute?" + params.toString();
     },
     hasContributed: () => !!entities.get().articleSession?.data.contributed,
-    getSupportOptions: (): readonly number[] =>
-      entities.get().supportOptions ?? [],
+    getContributionOptions: (): readonly number[] =>
+      entities.get().contributionOptions ?? [],
     resetOnNav: () =>
       urlListener(() => {
         setTimeout(() => {

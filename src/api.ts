@@ -50,10 +50,10 @@ export const api = ({
       flags: ArticleFlags | null;
       currency: string;
       platform: PlatformSettings | null;
-      supportOptions: readonly number[];
+      contributionOptions: readonly number[];
     }> => {
       try {
-        const { article, report, flags, currency, platform, supportOptions } =
+        const { article, report, flags, currency, platform, contributionOptions } =
           await apiClient(`/visit-article?url=${url}`, { method: "GET" });
         return {
           article,
@@ -61,7 +61,7 @@ export const api = ({
           flags,
           currency: currency ?? "usd",
           platform: platform ?? null,
-          supportOptions: supportOptions ?? [],
+          contributionOptions: contributionOptions ?? [],
         };
       } catch (err) {
         console.log("visitArticle error", err);
@@ -71,7 +71,7 @@ export const api = ({
           flags: null,
           currency: "usd",
           platform: null,
-          supportOptions: [],
+          contributionOptions: [],
         };
       }
     },

@@ -118,14 +118,14 @@ var api = ({
     },
     visitArticle: async (url) => {
       try {
-        const { article, report, flags, currency, platform, supportOptions } = await apiClient(`/visit-article?url=${url}`, { method: "GET" });
+        const { article, report, flags, currency, platform, contributionOptions } = await apiClient(`/visit-article?url=${url}`, { method: "GET" });
         return {
           article,
           report,
           flags,
           currency: currency ?? "usd",
           platform: platform ?? null,
-          supportOptions: supportOptions ?? []
+          contributionOptions: contributionOptions ?? []
         };
       } catch (err) {
         console.log("visitArticle error", err);
@@ -135,7 +135,7 @@ var api = ({
           flags: null,
           currency: "usd",
           platform: null,
-          supportOptions: []
+          contributionOptions: []
         };
       }
     },
@@ -189,7 +189,7 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
     flags: articleResp.flags,
     currency: articleResp.currency,
     platform: articleResp.platform ?? undefined,
-    supportOptions: articleResp.supportOptions
+    contributionOptions: articleResp.contributionOptions
   });
   const { article, report, flags } = entities.get();
   if (!article) {
@@ -437,8 +437,8 @@ var initPaperwall = (_config, platformDefaults = {}) => {
     const { article, flags, articleSession } = entities.get();
     if (article && flags) {
       if (!flags.previewMode || flags.previewMode && articleSession?.data.is_site_member) {
-        if (article.access_mode === "POST_READ_SUPPORT") {
-          return "@paperwall/show_support";
+        if (article.access_mode === "POST_READ_CONTRIBUTION") {
+          return "@paperwall/show_contribution";
         }
         return articleSession?.data.has_purchased ? "@paperwall/show_article" : "@paperwall/show_wall";
       }
@@ -516,7 +516,7 @@ var initPaperwall = (_config, platformDefaults = {}) => {
       return config.portalUrl + "/contribute?" + params.toString();
     },
     hasContributed: () => !!entities.get().articleSession?.data.contributed,
-    getSupportOptions: () => entities.get().supportOptions ?? [],
+    getContributionOptions: () => entities.get().contributionOptions ?? [],
     resetOnNav: () => urlListener(() => {
       setTimeout(() => {
         console.log("resetOnNav triggered");

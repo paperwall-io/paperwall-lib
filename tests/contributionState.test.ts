@@ -49,17 +49,17 @@ const load = async () => {
   return pw;
 };
 
-describe("post-read support state", () => {
+describe("post-read contribution state", () => {
   beforeEach(() => storage.clear());
   afterEach(() => {
     globalThis.fetch = realFetch;
   });
 
-  test("a POST_READ_SUPPORT article shows support, not the wall", async () => {
-    mockApi({ article: article("POST_READ_SUPPORT"), supportOptions: [4, 8, 20] });
+  test("a POST_READ_CONTRIBUTION article shows the contribution ask, not the wall", async () => {
+    mockApi({ article: article("POST_READ_CONTRIBUTION"), contributionOptions: [4, 8, 20] });
     const pw = await load();
-    expect(pw.wallState.get()).toBe("@paperwall/show_support");
-    expect(pw.getSupportOptions()).toEqual([4, 8, 20]);
+    expect(pw.wallState.get()).toBe("@paperwall/show_contribution");
+    expect(pw.getContributionOptions()).toEqual([4, 8, 20]);
     expect(pw.hasContributed()).toBe(false);
   });
 
@@ -67,24 +67,24 @@ describe("post-read support state", () => {
     mockApi({ article: article() });
     const pw = await load();
     expect(pw.wallState.get()).toBe("@paperwall/show_wall");
-    expect(pw.getSupportOptions()).toEqual([]);
+    expect(pw.getContributionOptions()).toEqual([]);
   });
 
   test("a reader who has paid is recognised", async () => {
     storage.set("paperwallSiteSession", "site-session-jwt");
     mockApi(
-      { article: article("POST_READ_SUPPORT"), supportOptions: [4, 8, 20] },
+      { article: article("POST_READ_CONTRIBUTION"), contributionOptions: [4, 8, 20] },
       session({ contributed: true }),
     );
     const pw = await load();
-    expect(pw.wallState.get()).toBe("@paperwall/show_support");
+    expect(pw.wallState.get()).toBe("@paperwall/show_contribution");
     expect(pw.hasContributed()).toBe(true);
   });
 
   test("the contribute link carries the amount, session and return URL", async () => {
     storage.set("paperwallSiteSession", "site-session-jwt");
     mockApi(
-      { article: article("POST_READ_SUPPORT"), supportOptions: [4, 8, 20] },
+      { article: article("POST_READ_CONTRIBUTION"), contributionOptions: [4, 8, 20] },
       session(),
     );
     const pw = await load();
@@ -101,7 +101,7 @@ describe("post-read support state", () => {
   });
 
   test("an anonymous reader's link has no session", async () => {
-    mockApi({ article: article("POST_READ_SUPPORT"), supportOptions: [4] });
+    mockApi({ article: article("POST_READ_CONTRIBUTION"), contributionOptions: [4] });
     const pw = await load();
     const link = new URL(pw.getContributeCta(4) as string);
     expect(link.searchParams.has("session_id")).toBe(false);
