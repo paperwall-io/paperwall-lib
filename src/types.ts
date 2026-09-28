@@ -36,7 +36,10 @@ export type WallState =
   | "@paperwall/session_pending"
   | "@paperwall/no_wall"
   | "@paperwall/show_wall"
-  | "@paperwall/show_article";
+  | "@paperwall/show_article"
+  // A POST_READ_SUPPORT article: nothing is gated, and the embed asks for
+  // support after the content.
+  | "@paperwall/show_support";
 
 export type StoreCallback = (newState: any) => any;
 export type Store<T> = {
@@ -58,6 +61,13 @@ export type Pricing = {
 
 export type ThresholdType = "NONE" | "RATING" | "VISITS" | "DAYS" | "READS";
 
+/**
+ * PRE_READ_WALL is pay-per-read. POST_READ_SUPPORT leaves the article open and
+ * asks for a voluntary payment after it. Absent from an API that predates it,
+ * which means PRE_READ_WALL.
+ */
+export type AccessMode = "PRE_READ_WALL" | "POST_READ_SUPPORT";
+
 export interface Article {
   id: string;
   use_ratings: number;
@@ -65,6 +75,7 @@ export interface Article {
   num_visits: number;
   date_published: string;
   threshold_type: ThresholdType;
+  access_mode?: AccessMode;
   pricing: Pricing[];
   threshold_value: number;
   num_tickets: number;
@@ -83,6 +94,8 @@ export interface ArticleSession {
   data: {
     is_site_member: boolean;
     has_purchased: boolean;
+    /** The reader has paid post-read support for this article. */
+    contributed?: boolean;
     pricing: {
       pricing_id: string;
       threshold_value: number;
@@ -127,6 +140,8 @@ export type WallStore = {
   flags?: ArticleFlags;
   currency?: string;
   platform?: PlatformSettings;
+  /** Ticket amounts offered after a POST_READ_SUPPORT article. Site-wide. */
+  supportOptions?: readonly number[];
   tmpData?: {
     articleSessionId?: string;
   };

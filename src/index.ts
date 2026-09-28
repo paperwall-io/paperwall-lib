@@ -89,6 +89,9 @@ const initPaperwall = (
         !flags.previewMode ||
         (flags.previewMode && articleSession?.data.is_site_member)
       ) {
+        if (article.access_mode === "POST_READ_SUPPORT") {
+          return "@paperwall/show_support";
+        }
         return articleSession?.data.has_purchased
           ? "@paperwall/show_article"
           : "@paperwall/show_wall";
@@ -163,6 +166,28 @@ const initPaperwall = (
         );
       }
     },
+    /**
+     * Portal link that pays `numTickets` of post-read support. Without a
+     * session the reader signs in on the portal first, as with getCta.
+     */
+    getContributeCta: (numTickets: number) => {
+      const { articleSession, article } = entities.get();
+      if (!article) {
+        return console.warn("getContributeCta: article not found");
+      }
+      const params = new URLSearchParams({
+        article_id: article.id,
+        tickets: String(numTickets),
+        redirect: window.location.toString(),
+      });
+      if (articleSession) {
+        params.set("session_id", articleSession.id);
+      }
+      return config.portalUrl + "/contribute?" + params.toString();
+    },
+    hasContributed: () => !!entities.get().articleSession?.data.contributed,
+    getSupportOptions: (): readonly number[] =>
+      entities.get().supportOptions ?? [],
     resetOnNav: () =>
       urlListener(() => {
         setTimeout(() => {
@@ -238,6 +263,7 @@ export type {
   ArticleFlags,
   Pricing,
   ThresholdType,
+  AccessMode,
   StoreCallback,
   CurrencyConfig,
   PlatformSettings,

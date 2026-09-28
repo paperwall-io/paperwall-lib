@@ -30,13 +30,19 @@ export interface WallConfig {
 	portalUrl?: string;
 	apiBaseUrl?: string;
 }
-export type WallState = "@paperwall/loading" | "@paperwall/app_pending" | "@paperwall/authenticating" | "@paperwall/session_pending" | "@paperwall/no_wall" | "@paperwall/show_wall" | "@paperwall/show_article";
+export type WallState = "@paperwall/loading" | "@paperwall/app_pending" | "@paperwall/authenticating" | "@paperwall/session_pending" | "@paperwall/no_wall" | "@paperwall/show_wall" | "@paperwall/show_article" | "@paperwall/show_support";
 export type StoreCallback = (newState: any) => any;
 export type Pricing = {
 	num_tickets: number;
 	threshold_value: number;
 };
 export type ThresholdType = "NONE" | "RATING" | "VISITS" | "DAYS" | "READS";
+/**
+ * PRE_READ_WALL is pay-per-read. POST_READ_SUPPORT leaves the article open and
+ * asks for a voluntary payment after it. Absent from an API that predates it,
+ * which means PRE_READ_WALL.
+ */
+export type AccessMode = "PRE_READ_WALL" | "POST_READ_SUPPORT";
 export interface Article {
 	id: string;
 	use_ratings: number;
@@ -44,6 +50,7 @@ export interface Article {
 	num_visits: number;
 	date_published: string;
 	threshold_type: ThresholdType;
+	access_mode?: AccessMode;
 	pricing: Pricing[];
 	threshold_value: number;
 	num_tickets: number;
@@ -61,6 +68,8 @@ export interface ArticleSession {
 	data: {
 		is_site_member: boolean;
 		has_purchased: boolean;
+		/** The reader has paid post-read support for this article. */
+		contributed?: boolean;
 		pricing: {
 			pricing_id: string;
 			threshold_value: number;
@@ -96,6 +105,8 @@ export type WallStore = {
 	flags?: ArticleFlags;
 	currency?: string;
 	platform?: PlatformSettings;
+	/** Ticket amounts offered after a POST_READ_SUPPORT article. Site-wide. */
+	supportOptions?: readonly number[];
 	tmpData?: {
 		articleSessionId?: string;
 	};
@@ -141,6 +152,13 @@ export declare const initPaperwall: (_config: WallConfig, platformDefaults?: Pla
 	detectIsPost: () => boolean;
 	getReadingTime: () => number | null;
 	getCta: () => string | void;
+	/**
+	 * Portal link that pays `numTickets` of post-read support. Without a
+	 * session the reader signs in on the portal first, as with getCta.
+	 */
+	getContributeCta: (numTickets: number) => string | void;
+	hasContributed: () => boolean;
+	getSupportOptions: () => readonly number[];
 	resetOnNav: () => () => void;
 	isFree: () => boolean;
 	isPreviewMode: () => true;

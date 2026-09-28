@@ -118,11 +118,25 @@ var api = ({
     },
     visitArticle: async (url) => {
       try {
-        const { article, report, flags, currency, platform } = await apiClient(`/visit-article?url=${url}`, { method: "GET" });
-        return { article, report, flags, currency: currency ?? "usd", platform: platform ?? null };
+        const { article, report, flags, currency, platform, supportOptions } = await apiClient(`/visit-article?url=${url}`, { method: "GET" });
+        return {
+          article,
+          report,
+          flags,
+          currency: currency ?? "usd",
+          platform: platform ?? null,
+          supportOptions: supportOptions ?? []
+        };
       } catch (err) {
         console.log("visitArticle error", err);
-        return { article: null, report: null, flags: null, currency: "usd", platform: null };
+        return {
+          article: null,
+          report: null,
+          flags: null,
+          currency: "usd",
+          platform: null,
+          supportOptions: []
+        };
       }
     },
     verifySite: (domain, token) => apiClient(`/sites/verify`, {
@@ -174,7 +188,8 @@ var initArticleSession = async (apiOpts, entities, wallState) => {
     article: articleResp.article,
     flags: articleResp.flags,
     currency: articleResp.currency,
-    platform: articleResp.platform ?? undefined
+    platform: articleResp.platform ?? undefined,
+    supportOptions: articleResp.supportOptions
   });
   const { article, report, flags } = entities.get();
   if (!article) {
@@ -422,6 +437,9 @@ var initPaperwall = (_config, platformDefaults = {}) => {
     const { article, flags, articleSession } = entities.get();
     if (article && flags) {
       if (!flags.previewMode || flags.previewMode && articleSession?.data.is_site_member) {
+        if (article.access_mode === "POST_READ_SUPPORT") {
+          return "@paperwall/show_support";
+        }
         return articleSession?.data.has_purchased ? "@paperwall/show_article" : "@paperwall/show_wall";
       }
     }
@@ -482,6 +500,23 @@ var initPaperwall = (_config, platformDefaults = {}) => {
         }).toString();
       }
     },
+    getContributeCta: (numTickets) => {
+      const { articleSession, article } = entities.get();
+      if (!article) {
+        return console.warn("getContributeCta: article not found");
+      }
+      const params = new URLSearchParams({
+        article_id: article.id,
+        tickets: String(numTickets),
+        redirect: window.location.toString()
+      });
+      if (articleSession) {
+        params.set("session_id", articleSession.id);
+      }
+      return config.portalUrl + "/contribute?" + params.toString();
+    },
+    hasContributed: () => !!entities.get().articleSession?.data.contributed,
+    getSupportOptions: () => entities.get().supportOptions ?? [],
     resetOnNav: () => urlListener(() => {
       setTimeout(() => {
         console.log("resetOnNav triggered");

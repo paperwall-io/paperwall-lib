@@ -39,6 +39,7 @@ export const initArticleSession = async (
     flags: articleResp.flags as ArticleFlags,
     currency: articleResp.currency,
     platform: articleResp.platform ?? undefined,
+    supportOptions: articleResp.supportOptions,
   });
 
   const { article, report, flags } = entities.get();
