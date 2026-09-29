@@ -1,4 +1,6 @@
 import { describe, test, expect, beforeAll } from "bun:test";
+import { hkdf } from "@panva/hkdf";
+import { EncryptJWT, base64url, calculateJwkThumbprint } from "jose";
 
 // Mock window for apiFetch (uses window.location.origin in request headers)
 (globalThis as any).window = { location: { origin: "http://localhost" } };
@@ -6,17 +8,50 @@ import { describe, test, expect, beforeAll } from "bun:test";
 import { api } from "../../src/api";
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3003";
-const PORTAL_API_KEY =
-  process.env.PORTAL_API_KEY || "8D492654-F25F-439C-917D-D9DE3217DBC7";
+const PORTAL_API_KEY = process.env.PORTAL_API_KEY as string;
+const AUTH_COOKIE = process.env.AUTH_COOKIE as string;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // Seeded data (from api/tests/fixtures/seed-data.ts)
+const VISITOR_ID = "user-visitor-001";
 const ARTICLE_ID = "article-001";
+
+// ── JWT generation (mirrors API's authJwts.ts encode logic) ──
+const encodeJWT = async (
+  payload: Record<string, unknown>,
+  salt: string,
+): Promise<string> => {
+  const encryptionSecret = await hkdf(
+    "sha256",
+    JWT_SECRET,
+    salt,
+    `Auth.js Generated Encryption Key (${salt})`,
+    64,
+  );
+  const thumbprint = await calculateJwkThumbprint(
+    { kty: "oct", k: base64url.encode(encryptionSecret) },
+    "sha512",
+  );
+  return new EncryptJWT(payload)
+    .setProtectedHeader({ alg: "dir", enc: "A256CBC-HS512", kid: thumbprint })
+    .setIssuedAt()
+    .setExpirationTime(Math.floor(Date.now() / 1000) + 60 * 60)
+    .setJti(crypto.randomUUID())
+    .encrypt(encryptionSecret);
+};
 
 describe("Embed API Integration", () => {
   let siteSession: string;
   let embedApi: ReturnType<typeof api>;
 
   beforeAll(async () => {
+    // Sign in as the seeded visitor. The API only reuses article sessions for
+    // signed-in readers; a signed-out reader gets a fresh session every time.
+    const visitorJwt = await encodeJWT(
+      { userId: VISITOR_ID, dateCreated: new Date().toISOString() },
+      AUTH_COOKIE,
+    );
+
     // Get a quick-auth token for the seeded article
     const quickAuthRes = await fetch(
       `${API_BASE_URL}/account/quick-auth`,
@@ -25,6 +60,7 @@ describe("Embed API Integration", () => {
         headers: {
           "Content-Type": "application/json",
           "portal-api-key": PORTAL_API_KEY,
+          Cookie: `${AUTH_COOKIE}=${visitorJwt}`,
         },
         body: JSON.stringify({ articleId: ARTICLE_ID, articleSessionId: null }),
       },

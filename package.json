@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "bun build.ts",
-    "test:integration": "bun test tests/integration/"
+    "test:integration": "APP_ENV=ci varlock run -- bun test tests/integration/"
   },
   "exports": {
     ".": {
@@ -28,8 +28,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@panva/hkdf": "^1.2.1",
     "@types/bun": "latest",
-    "bun-plugin-dts": "^0.3.0"
+    "@varlock/1password-plugin": "~1.1.0",
+    "bun-plugin-dts": "^0.3.0",
+    "jose": "^5.9.3"
   },
   "peerDependencies": {
     "typescript": "^5"
